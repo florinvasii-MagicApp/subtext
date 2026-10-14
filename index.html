@@ -59,9 +59,9 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="font-extrabold tracking-tight text-base text-white">SUBTEXT</h1>
-            <span id="proBadge" class="text-[10px] mono uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-semibold">FREE 2/2</span>
+            <span id="proBadge" class="text-[10px] mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold">PRO ACTIV</span>
           </div>
-          <p id="aiStatusSubtitle" class="text-[11px] text-slate-400">v1.4 • Apasă 🔑 pentru conectare</p>
+          <p id="aiStatusSubtitle" class="text-[11px] text-amber-400 font-medium">v1.6 • Apasă 🔑 pentru activare</p>
         </div>
       </div>
 
@@ -69,7 +69,7 @@
         <button onclick="openPaywallModal()" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition">
           ⚡ PRO
         </button>
-        <button onclick="openApiModal()" id="apiStatusBtn" class="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 hover:text-white transition" title="Setări Gemini API">
+        <button onclick="openApiModal()" id="apiStatusBtn" class="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 transition" title="Setări Gemini API">
           🔑
         </button>
       </div>
@@ -107,7 +107,7 @@
             <button onclick="selectContext('Negociere & Vânzări', this)" class="ctx-btn active-ctx text-xs py-2 px-2 rounded-xl border border-amber-500 bg-amber-500/15 text-amber-300 font-semibold transition">
               💰 Negociere
             </button>
-            <button onclick="selectContext('Șef / Corporație / Asociație de Proprietari', this)" class="ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition">
+            <button onclick="selectContext('Șef / Corporație / Ședință de Proprietari', this)" class="ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition">
               🏢 Oficial / Grup
             </button>
             <button onclick="selectContext('Relații & Personal', this)" class="ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition">
@@ -150,7 +150,7 @@
         <div id="errorBox" class="hidden glass-card rounded-2xl p-4 border border-red-500/50 bg-red-950/20 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-red-400">⚠️ Eroare conexiune Gemini API</span>
-            <button onclick="openApiModal()" class="text-[11px] px-2.5 py-1 rounded bg-red-500/20 text-red-300 border border-red-500/40 font-semibold">Setează Cheia 🔑</button>
+            <button onclick="openApiModal()" class="text-[11px] px-2.5 py-1 rounded bg-red-500/20 text-red-300 border border-red-500/40 font-semibold">Verifică Cheia 🔑</button>
           </div>
           <p id="errorText" class="text-xs text-slate-300 leading-relaxed mono"></p>
         </div>
@@ -158,8 +158,8 @@
         <!-- Loading State -->
         <div id="loadingBox" class="hidden glass-card rounded-2xl p-6 text-center space-y-3 border border-amber-500/30">
           <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Gemini AI analizează nuanțele și construiește replicile...</p>
-          <p class="text-xs text-slate-400">Calibrare psihologică & retorică</p>
+          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Gemini Flash Latest analizează mesajul tău...</p>
+          <p class="text-xs text-slate-400">Calibrare psihologică & retorică la obiect</p>
         </div>
 
         <!-- RESULTS CONTAINER -->
@@ -307,13 +307,13 @@
   <div id="apiModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="glass-card max-w-sm w-full rounded-2xl p-5 border border-slate-700 space-y-4">
       <div class="flex justify-between items-center">
-        <h3 class="font-bold text-sm text-white">🔑 Conectare Google Gemini API (v1.4)</h3>
+        <h3 class="font-bold text-sm text-white">🔑 Conectare Google Gemini API (v1.6)</h3>
         <button onclick="closeApiModal()" class="text-slate-400 hover:text-white">✕</button>
       </div>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Suportă atât noile chei Auth (<code class="text-emerald-400">AQ.Ab8...</code>), cât și cheile clasice (<code class="text-amber-400">AIzaSy...</code>) din Google AI Studio.
+        Lipește cheia ta (<code class="text-emerald-400">AQ.Ab8...</code> sau <code class="text-amber-400">AIzaSy...</code>). Cheia se salvează exclusiv în memoria privată a telefonului tău.
       </p>
-      <input id="apiKeyInput" type="text" autocomplete="off" spellcheck="false" placeholder="Lipește cheia AQ... sau AIzaSy..." class="w-full bg-slate-950 text-xs text-amber-300 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 mono" />
+      <input id="apiKeyInput" type="text" autocomplete="off" spellcheck="false" placeholder="AQ.Ab8... sau AIzaSy..." class="w-full bg-slate-950 text-xs text-amber-300 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 mono" />
       <div id="apiTestStatus" class="hidden text-xs p-2.5 rounded-lg leading-relaxed mono"></div>
       <div class="flex gap-2">
         <button onclick="saveAndTestApiKey()" id="saveKeyBtn" class="flex-1 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs">Salvează și Testează Cheia</button>
@@ -328,19 +328,13 @@
       <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-2xl">
         👑
       </div>
-      <h3 class="font-extrabold text-base text-white">Deblochează SUBTEXT PRO</h3>
+      <h3 class="font-extrabold text-base text-white">SUBTEXT PRO ESTE ACTIV</h3>
       <p class="text-xs text-slate-300 leading-relaxed">
-        Controlează orice negociere și citește printre rânduri fără limite zilnice.
+        Ai acces nelimitat la toate funcțiile de decodare psihologică, screenshot-uri și dosare.
       </p>
-      <ul class="text-xs text-left space-y-2 bg-slate-950/90 p-3.5 rounded-xl border border-slate-800 text-slate-200">
-        <li>✅ <strong>Decodări Nelimitate</strong> (Text & Screenshot WhatsApp)</li>
-        <li>✅ <strong>Dosare de Țintă Nelimitate</strong> cu detecție de tipar</li>
-        <li>✅ <strong>Sparring Tactic Nelimitat</strong> pentru negocieri grele</li>
-      </ul>
-      <button onclick="activateProSimulation()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-xs gold-glow">
-        ACTIVEAZĂ PRO (Simulare Gratuită)
+      <button onclick="closePaywallModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-xs gold-glow">
+        ÎNCHIDE
       </button>
-      <button onclick="closePaywallModal()" class="text-xs text-slate-400 hover:text-white block mx-auto">Mai târziu</button>
     </div>
   </div>
 
@@ -353,10 +347,7 @@
     let currentContext = 'Negociere & Vânzări';
     let uploadedImageBase64 = null;
     let uploadedImageMime = null;
-    let freeUsesLeft = parseInt(localStorage.getItem('subtext_free_uses') ?? '2');
-    let isPro = localStorage.getItem('subtext_is_pro') === 'true';
     let dossiers = JSON.parse(localStorage.getItem('subtext_dossiers') || '[]');
-    let cachedWorkingModel = localStorage.getItem('subtext_working_model') || '';
 
     const presets = {
       client: {
@@ -364,7 +355,7 @@
         text: 'Sincer, oferta voastră e mult peste ce am bugetat noi. Am discutat intern și dacă nu puteți lăsa măcar un 20% jos și să includeți livrarea gratuită săptămâna asta, va trebui să mergem cu altcineva.'
       },
       boss: {
-        context: 'Șef / Corporație / Asociație de Proprietari',
+        context: 'Șef / Corporație / Ședință de Proprietari',
         text: 'Știu că e vineri ora 17:30, dar clientul mare vrea prezentarea refăcută până luni la 9 dimineața. Nu e obligatoriu să stai peste program, dar să știi că luni evaluăm cine se implică cu adevărat în echipă.'
       },
       partner: {
@@ -374,10 +365,9 @@
     };
 
     function initApp() {
-      updateProBadge();
       renderDossiers();
       const savedKey = getCleanApiKey();
-      updateKeyVisualState(savedKey.length > 15);
+      updateKeyVisualState(!!savedKey);
       if (savedKey) {
         document.getElementById('apiKeyInput').value = savedKey;
       }
@@ -393,22 +383,12 @@
       const sub = document.getElementById('aiStatusSubtitle');
       if (hasKey) {
         btn.className = 'p-2 rounded-lg bg-emerald-500/20 border border-emerald-500 text-emerald-400 transition';
-        sub.textContent = `🟢 Gemini AI Conectat (${cachedWorkingModel || 'v1.4 Live'})`;
+        sub.textContent = '🟢 Gemini Flash Latest Conectat (v1.6)';
         sub.className = 'text-[11px] text-emerald-400 font-medium';
       } else {
         btn.className = 'p-2 rounded-lg bg-red-500/20 border border-red-500/60 text-red-300 pulse-ring transition';
         sub.textContent = '🔴 Apasă 🔑 pentru a salva cheia Gemini';
         sub.className = 'text-[11px] text-amber-400 font-medium';
-      }
-    }
-
-    function updateProBadge() {
-      const badge = document.getElementById('proBadge');
-      if (isPro) {
-        badge.textContent = 'PRO ACTIV';
-        badge.className = 'text-[10px] mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold';
-      } else {
-        badge.textContent = `FREE ${freeUsesLeft}/2`;
       }
     }
 
@@ -454,83 +434,47 @@
       document.getElementById('imagePreviewContainer').classList.add('hidden');
     }
 
-    // Construiește headere compatibile atât cu AIzaSy... cât și cu AQ.Ab8...
-    function buildAuthHeaders(apiKey, includeContentType = true) {
-      const headers = {
-        'x-goog-api-key': apiKey
-      };
-      if (includeContentType) {
-        headers['Content-Type'] = 'application/json';
-      }
-      return headers;
-    }
-
-    async function discoverBestGeminiModel(apiKey) {
-      const endpoints = [
-        `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`,
-        `https://generativelanguage.googleapis.com/v1/models?key=${encodeURIComponent(apiKey)}`
-      ];
-
+    async function callGeminiFlashLatest(apiKey, promptText, includeImage = true) {
+      const modelsToTry = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
       let lastErr = null;
-      for (const url of endpoints) {
+
+      for (const modelName of modelsToTry) {
         try {
-          const res = await fetch(url, {
-            method: 'GET',
-            headers: buildAuthHeaders(apiKey, false)
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
+          const parts = [{ text: promptText }];
+          if (includeImage && uploadedImageBase64) {
+            parts.push({
+              inline_data: {
+                mime_type: uploadedImageMime || 'image/jpeg',
+                data: uploadedImageBase64
+              }
+            });
+          }
+
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-goog-api-key': apiKey
+            },
+            body: JSON.stringify({
+              contents: [{ parts }]
+            })
           });
-          const data = await res.json();
-          if (!res.ok) {
-            lastErr = new Error(data?.error?.message || `HTTP ${res.status}`);
-            continue;
-          }
-          const models = (data.models || [])
-            .filter(m => (m.supportedGenerationMethods || []).includes('generateContent'))
-            .map(m => m.name.replace('models/', ''));
 
-          const preferred = [
-            'gemini-2.5-flash',
-            'gemini-2.0-flash',
-            'gemini-2.5-pro',
-            'gemini-2.0-flash-lite'
-          ];
-          for (const p of preferred) {
-            if (models.includes(p)) return p;
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data?.error?.message || `HTTP ${response.status}`);
           }
-          const anyFlash = models.find(m => m.includes('flash'));
-          if (anyFlash) return anyFlash;
-          if (models.length > 0) return models[0];
-        } catch (e) {
-          lastErr = e;
+
+          const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          if (!rawText) throw new Error('Răspuns gol de la model');
+          return rawText;
+        } catch (err) {
+          lastErr = err;
         }
       }
-
-      // Dacă ListModels e restricționat pe cheile AQ, testăm direct generateContent pe gemini-2.5-flash sau gemini-2.0-flash
-      const directModels = ['gemini-2.5-flash', 'gemini-2.0-flash'];
-      for (const dm of directModels) {
-        try {
-          await testPingModel(apiKey, dm);
-          return dm;
-        } catch (pingErr) {
-          lastErr = pingErr;
-        }
-      }
-      throw lastErr || new Error('Nu s-a putut găsi un model disponibil pentru această cheie.');
-    }
-
-    async function testPingModel(apiKey, modelName) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: buildAuthHeaders(apiKey, true),
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: 'Răspunde cu OK' }] }]
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data?.error?.message || `Status ${res.status}`);
-      }
-      return true;
+      throw lastErr || new Error('Nu s-a putut contacta serverul Gemini.');
     }
 
     async function runSubtextAnalysis() {
@@ -543,12 +487,7 @@
       const apiKey = getCleanApiKey();
       if (!apiKey) {
         openApiModal();
-        showToast('Salvează cheia Gemini API mai întâi!');
-        return;
-      }
-
-      if (!isPro && freeUsesLeft <= 0) {
-        openPaywallModal();
+        showToast('Lipește cheia în fereastra 🔑!');
         return;
       }
 
@@ -556,57 +495,15 @@
       document.getElementById('loadingBox').classList.remove('hidden');
       document.getElementById('resultsContainer').classList.add('hidden');
 
-      try {
-        const analysisResult = await callGeminiSmart(apiKey, text, currentContext);
-
-        if (!isPro) {
-          freeUsesLeft = Math.max(0, freeUsesLeft - 1);
-          localStorage.setItem('subtext_free_uses', freeUsesLeft.toString());
-          updateProBadge();
-        }
-
-        displayResults(analysisResult, text);
-        document.getElementById('loadingBox').classList.add('hidden');
-        document.getElementById('resultsContainer').classList.remove('hidden');
-      } catch (err) {
-        console.error(err);
-        document.getElementById('loadingBox').classList.add('hidden');
-        document.getElementById('errorText').textContent = `Detalii tehnic: ${err.message}`;
-        document.getElementById('errorBox').classList.remove('hidden');
-      }
-    }
-
-    async function callGeminiSmart(apiKey, text, context) {
-      const candidateModels = [];
-      if (cachedWorkingModel) candidateModels.push(cachedWorkingModel);
-      ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-pro'].forEach(m => {
-        if (!candidateModels.includes(m)) candidateModels.push(m);
-      });
-
-      let errors = [];
-      for (const model of candidateModels) {
-        try {
-          const res = await callGeminiSingleModel(apiKey, model, text, context);
-          cachedWorkingModel = model;
-          localStorage.setItem('subtext_working_model', model);
-          updateKeyVisualState(true);
-          return res;
-        } catch (err) {
-          errors.push(`${model}:${err.message}`);
-        }
-      }
-      throw new Error(errors[0] || 'Eroare necunoscută API');
-    }
-
-    async function callGeminiSingleModel(apiKey, modelName, text, context) {
       const prompt = `Ești SUBTEXT, un decodor psihologic de elită, strateg în comunicare și expert în negociere (stilul Chris Voss / analiză tranzacțională).
-Contextul interacțiunii: ${context}.
+Contextul interacțiunii: ${currentContext}.
 
-Analizează SPECIFIC mesajul de mai jos (și/sau imaginea atașată), referindu-te direct la subiectul, cuvintele și detaliile din mesajul utilizatorului. NU da răspunsuri generice!
-Returnează EXCLUSIV un obiect JSON valid (fără blocuri markdown \`\`\`json) cu exact această structură:
+Analizează SPECIFIC mesajul de mai jos (și/sau imaginea atașată), referindu-te direct la subiectul, cuvintele și detaliile din mesajul utilizatorului (de exemplu: dacă vorbește despre ședințe de proprietari, WhatsApp, costuri, termene sau reproșuri, referă-te exact la acele lucruri!). NU da răspunsuri generice!
+
+Returnează EXCLUSIV un obiect JSON valid (fără blocuri markdown \`\`\`json și fără niciun alt text înainte sau după) cu exact această structură:
 {
   "tactic": "Numele scurt al tacticii psihologice folosite în acest mesaj (max 4 cuvinte)",
-  "score": număr întreg între 10 și 99 reprezentând nivelul de presiune/manipulare/pasiv-agresivitate,
+  "score": 85,
   "hiddenIntent": "2 propoziții clare, specifice pe subiectul mesajului, despre ce urmărește în realitate interlocutorul și ce încearcă să insinueze.",
   "weakPoint": "1-2 propoziții aplicate pe situație despre punctul lui slab și unde ai tu pârghia de putere.",
   "diplomatic": "Replică diplomatică, calmă dar fermă, adaptată exact la subiectul mesajului, gata de trimis pe WhatsApp/Email.",
@@ -619,61 +516,38 @@ Mesajul exact de analizat:
 ${text}
 """`;
 
-      const parts = [{ text: prompt }];
-      if (uploadedImageBase64) {
-        parts.push({
-          inline_data: {
-            mime_type: uploadedImageMime || 'image/jpeg',
-            data: uploadedImageBase64
-          }
-        });
+      try {
+        let rawResponse = await callGeminiFlashLatest(apiKey, prompt, true);
+        rawResponse = rawResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
+
+        const firstBrace = rawResponse.indexOf('{');
+        const lastBrace = rawResponse.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1) {
+          rawResponse = rawResponse.slice(firstBrace, lastBrace + 1);
+        }
+
+        const parsed = JSON.parse(rawResponse);
+        displayResults(parsed, text);
+        document.getElementById('loadingBox').classList.add('hidden');
+        document.getElementById('resultsContainer').classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loadingBox').classList.add('hidden');
+        document.getElementById('errorText').textContent = `Detalii: ${err.message}`;
+        document.getElementById('errorBox').classList.remove('hidden');
       }
-
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: buildAuthHeaders(apiKey, true),
-        body: JSON.stringify({
-          contents: [{ parts }],
-          generationConfig: {
-            temperature: 0.7,
-            responseMimeType: "application/json"
-          }
-        })
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        const apiErr = data?.error?.message || `HTTP ${response.status}`;
-        throw new Error(apiErr);
-      }
-
-      let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-
-      const firstBrace = rawText.indexOf('{');
-      const lastBrace = rawText.lastIndexOf('}');
-      if (firstBrace !== -1 && lastBrace !== -1) {
-        rawText = rawText.slice(firstBrace, lastBrace + 1);
-      }
-
-      const parsed = JSON.parse(rawText);
-      if (!parsed.diplomatic || !parsed.dominant || !parsed.socratic) {
-        throw new Error('Răspuns JSON incomplet');
-      }
-      return parsed;
     }
 
     function displayResults(res, originalText) {
       document.getElementById('resTacticBadge').textContent = res.tactic || 'Analiză Tactică';
-      const scoreVal = Math.min(99, Math.max(5, parseInt(res.score) || 70));
+      const scoreVal = Math.min(99, Math.max(5, parseInt(res.score) || 75));
       document.getElementById('resScoreText').textContent = `${scoreVal}%`;
       document.getElementById('resScoreBar').style.width = `${scoreVal}%`;
-      document.getElementById('resHiddenIntent').textContent = res.hiddenIntent;
-      document.getElementById('resWeakPoint').textContent = res.weakPoint;
-      document.getElementById('replyDiplomatic').textContent = res.diplomatic;
-      document.getElementById('replyDominant').textContent = res.dominant;
-      document.getElementById('replySocratic').textContent = res.socratic;
+      document.getElementById('resHiddenIntent').textContent = res.hiddenIntent || '';
+      document.getElementById('resWeakPoint').textContent = res.weakPoint || '';
+      document.getElementById('replyDiplomatic').textContent = res.diplomatic || '';
+      document.getElementById('replyDominant').textContent = res.dominant || '';
+      document.getElementById('replySocratic').textContent = res.socratic || '';
 
       const dossierId = document.getElementById('dossierSelect').value;
       if (dossierId) {
@@ -829,39 +703,30 @@ ${text}
         return;
       }
 
-      localStorage.setItem('subtext_gemini_key', cleanKey);
-      saveBtn.textContent = 'Se verifică cheia...';
+      saveBtn.textContent = 'Se testează...';
       statusBox.className = 'text-xs p-2.5 rounded-lg bg-slate-900 text-amber-300 border border-amber-500/30 mono';
-      statusBox.textContent = 'Se conectează la Google AI Studio...';
+      statusBox.textContent = 'Se apelează gemini-flash-latest cu X-goog-api-key...';
       statusBox.classList.remove('hidden');
 
       try {
-        const bestModel = await discoverBestGeminiModel(cleanKey);
-        cachedWorkingModel = bestModel;
-        localStorage.setItem('subtext_working_model', bestModel);
+        await callGeminiFlashLatest(cleanKey, 'Răspunde scurt cu OK', false);
+        localStorage.setItem('subtext_gemini_key', cleanKey);
         updateKeyVisualState(true);
         statusBox.className = 'text-xs p-2.5 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 mono';
-        statusBox.textContent = `✅ Conectat cu succes! Model activ: ${bestModel}`;
+        statusBox.textContent = '✅ Conectat cu succes pe gemini-flash-latest!';
         saveBtn.textContent = 'Salvează și Testează Cheia';
-        showToast(`Conectat pe ${bestModel}!`);
+        showToast('Cheia funcționează impecabil!');
         setTimeout(() => closeApiModal(), 900);
       } catch (err) {
         updateKeyVisualState(false);
         statusBox.className = 'text-xs p-2.5 rounded-lg bg-red-950/80 text-red-300 border border-red-500/40 mono';
-        statusBox.textContent = `❌ Eroare server Google: ${err.message}`;
+        statusBox.textContent = `❌ Eroare: ${err.message}`;
         saveBtn.textContent = 'Salvează și Testează Cheia';
       }
     }
 
     function openPaywallModal() { document.getElementById('paywallModal').classList.remove('hidden'); }
     function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
-    function activateProSimulation() {
-      isPro = true;
-      localStorage.setItem('subtext_is_pro', 'true');
-      updateProBadge();
-      closePaywallModal();
-      showToast('SUBTEXT PRO Activat!');
-    }
 
     initApp();
   </script>
