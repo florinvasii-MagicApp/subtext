@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ro" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#090A0F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>SUBTEXT — Decodor Psihologic & Replici Tactice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #08090E;
+      --card-bg: #121520;
+      --border-col: #1E2436;
+      --accent-gold: #F59E0B;
+      --accent-cyan: #06B6D4;
+      --accent-crimson: #EF4444;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: #F1F5F9;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glass-card {
+      background: rgba(18, 21, 32, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .gold-glow {
+      box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.35);
+    }
+    .pulse-ring {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #08090E; }
+    ::-webkit-scrollbar-thumb { background: #1E2436; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex justify-center bg-[#050609]">
+
+  <!-- Mobile App Container -->
+  <div class="w-full max-w-md min-h-screen bg-[#08090E] flex flex-col justify-between relative border-x border-slate-800/60 shadow-2xl pb-20">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-30 glass-card px-4 py-3.5 flex items-center justify-between border-b border-slate-800/80">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-extrabold text-slate-950 shadow-lg shadow-amber-500/20">
+          S
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold tracking-tight text-base text-white">SUBTEXT</h1>
+            <span id="proBadge" class="text-[10px] mono uppercase px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-semibold">FREE 2/2</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Powered by Google Gemini AI</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openPaywallModal()" class="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition">
+          ⚡ PRO
+        </button>
+        <button onclick="openApiModal()" id="apiStatusBtn" class="p-2 rounded-lg bg-slate-800/80 border border-slate-700 text-slate-300 hover:text-white transition" title="Setări Gemini API">
+          🔑
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 p-4 space-y-5 overflow-y-auto">
+
+      <!-- ================= TAB 1: DECODOR ================= -->
+      <section id="tab-decoder" class="space-y-4">
+
+        <!-- Demo Presets Bar -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mono">Scenarii Rapide (1-Click Test)</span>
+            <button onclick="clearDecoder()" class="text-[11px] text-slate-400 hover:text-amber-400">Șterge</button>
+          </div>
+          <div class="flex gap-2 overflow-x-auto pb-1">
+            <button onclick="loadPreset('client')" class="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:border-amber-500/60 transition">
+              💼 Client: „E prea scump”
+            </button>
+            <button onclick="loadPreset('boss')" class="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:border-amber-500/60 transition">
+              👔 Șef: Urgență vineri seara
+            </button>
+            <button onclick="loadPreset('partner')" class="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:border-amber-500/60 transition">
+              🎭 Pasiv-Agresiv: „Fă cum vrei”
+            </button>
+          </div>
+        </div>
+
+        <!-- Context Selector -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mono">1. Contextul Interacțiunii</label>
+          <div class="grid grid-cols-3 gap-2" id="contextButtons">
+            <button onclick="selectContext('Negociere & Vânzări', this)" class="ctx-btn active-ctx text-xs py-2 px-2 rounded-xl border border-amber-500 bg-amber-500/15 text-amber-300 font-semibold transition">
+              💰 Negociere
+            </button>
+            <button onclick="selectContext('Șef / Corporație', this)" class="ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition">
+              🏢 Corporație
+            </button>
+            <button onclick="selectContext('Relații & Personal', this)" class="ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition">
+              ❤️ Personal
+            </button>
+          </div>
+        </div>
+
+        <!-- Target Dossier Selector -->
+        <div class="flex items-center justify-between gap-2 glass-card p-2.5 rounded-xl">
+          <span class="text-xs text-slate-300 font-medium">📁 Asociază cu un Dosar Țintă:</span>
+          <select id="dossierSelect" class="bg-slate-900 text-xs text-amber-300 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500">
+            <option value="">Fără dosar (Analiză rapidă)</option>
+          </select>
+        </div>
+
+        <!-- Message Input or Screenshot -->
+        <div class="glass-card rounded-2xl p-3.5 space-y-3 border border-slate-800">
+          <div class="flex items-center justify-between">
+            <label class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mono">2. Mesajul primit sau Screenshot</label>
+            <label class="cursor-pointer inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 font-medium">
+              <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)" />
+              📷 Încarcă Screenshot
+            </label>
+          </div>
+
+          <!-- Image Preview if uploaded -->
+          <div id="imagePreviewContainer" class="hidden relative rounded-xl overflow-hidden border border-cyan-500/40 bg-slate-950 p-2">
+            <img id="imagePreview" src="" class="max-h-40 mx-auto rounded-lg object-contain" />
+            <button onclick="removeImage()" class="absolute top-2 right-2 bg-red-600/90 text-white text-xs px-2 py-0.5 rounded-md">✕</button>
+          </div>
+
+          <textarea id="messageInput" rows="4" placeholder="Lipește aici mesajul primit pe WhatsApp, Email sau SMS..." class="w-full bg-slate-950/90 text-sm text-slate-100 placeholder-slate-500 rounded-xl p-3 border border-slate-800 focus:outline-none focus:border-amber-500/70 resize-none"></textarea>
+
+          <button onclick="runSubtextAnalysis()" id="analyzeBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-sm tracking-wide gold-glow hover:brightness-110 active:scale-[0.99] transition flex items-center justify-center gap-2">
+            <span>🎯 DECODEAZĂ SUBTEXTUL</span>
+          </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingBox" class="hidden glass-card rounded-2xl p-6 text-center space-y-3 border border-amber-500/30">
+          <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Se scanează micro-manipulările și raportul de putere...</p>
+          <p class="text-xs text-slate-400">Calibrare retorică & tactică</p>
+        </div>
+
+        <!-- RESULTS CONTAINER -->
+        <div id="resultsContainer" class="hidden space-y-4">
+
+          <!-- Radar Card -->
+          <div class="glass-card rounded-2xl p-4 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] mono uppercase tracking-wider text-slate-400">Radiografie Psihologică</span>
+              <span id="resTacticBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
+                Ancorare & Presiune
+              </span>
+            </div>
+
+            <!-- Manipulation Meter -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-400">Nivel Presiune / Manipulare</span>
+                <span id="resScoreText" class="mono font-bold text-amber-400">82%</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800">
+                <div id="resScoreBar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-red-500 transition-all duration-700" style="width: 82%"></div>
+              </div>
+            </div>
+
+            <!-- Translation Grid -->
+            <div class="grid grid-cols-1 gap-2.5 pt-2">
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/90">
+                <span class="text-[10px] mono uppercase text-cyan-400 block mb-0.5">🔍 Ce urmărește în realitate (Subtextul)</span>
+                <p id="resHiddenIntent" class="text-xs text-slate-200 leading-relaxed"></p>
+              </div>
+              <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/90">
+                <span class="text-[10px] mono uppercase text-amber-400 block mb-0.5">⚡ Punctul lui slab (Levierul tău)</span>
+                <p id="resWeakPoint" class="text-xs text-slate-200 leading-relaxed"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 Surgical Replies -->
+          <div class="space-y-2.5">
+            <h3 class="text-xs mono uppercase tracking-wider text-slate-400 font-semibold px-1">3 Replici Chirurgicale (1-Click Copy)</h3>
+
+            <!-- Reply 1: Diplomatic -->
+            <div class="glass-card rounded-2xl p-3.5 border border-emerald-500/30 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">🛡️ 1. Diplomatic & Ferm</span>
+                <button onclick="copyReply('replyDiplomatic')" class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 font-medium">
+                  Copiază
+                </button>
+              </div>
+              <p id="replyDiplomatic" class="text-xs text-slate-100 leading-relaxed bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80"></p>
+            </div>
+
+            <!-- Reply 2: Dominant -->
+            <div class="glass-card rounded-2xl p-3.5 border border-amber-500/30 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">⚡ 2. Dominant (Taie jocul)</span>
+                <button onclick="copyReply('replyDominant')" class="text-xs px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 font-medium">
+                  Copiază
+                </button>
+              </div>
+              <p id="replyDominant" class="text-xs text-slate-100 leading-relaxed bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80"></p>
+            </div>
+
+            <!-- Reply 3: Socratic -->
+            <div class="glass-card rounded-2xl p-3.5 border border-cyan-500/30 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">🎯 3. Socratic (Întoarce masa)</span>
+                <button onclick="copyReply('replySocratic')" class="text-xs px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25 font-medium">
+                  Copiază
+                </button>
+              </div>
+              <p id="replySocratic" class="text-xs text-slate-100 leading-relaxed bg-slate-950/70 p-2.5 rounded-xl border border-slate-800/80"></p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: DOSARE TINTA ================= -->
+      <section id="tab-dossiers" class="hidden space-y-4">
+        <div class="glass-card rounded-2xl p-4 border border-slate-800 space-y-3">
+          <h2 class="text-sm font-bold text-white flex items-center gap-2">📁 Dosare de Profil (Memorie Interlocutori)</h2>
+          <p class="text-xs text-slate-400">Creează fișe pentru clienți, șefi sau parteneri. SUBTEXT le reține tiparele de manipulare și istoricul.</p>
+
+          <div class="flex gap-2 pt-1">
+            <input id="newDossierName" type="text" placeholder="Ex: Client Alexandru / Director" class="flex-1 bg-slate-950 text-xs text-white px-3 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:border-amber-500" />
+            <button onclick="addDossier()" class="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400 transition">
+              + Adaugă
+            </button>
+          </div>
+        </div>
+
+        <div id="dossierList" class="space-y-3"></div>
+      </section>
+
+      <!-- ================= TAB 3: SIMULATOR ================= -->
+      <section id="tab-simulator" class="hidden space-y-4">
+        <div class="glass-card rounded-2xl p-4 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-sm font-bold text-white">🥊 Sparring de Negociere</h2>
+            <span class="text-[11px] mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Antrenament</span>
+          </div>
+          <p class="text-xs text-slate-400">Antrenează-ți sângele rece înainte de o discuție cu miză mare. Răspunde la provocarea de mai jos:</p>
+
+          <div class="bg-slate-950 p-3.5 rounded-xl border border-red-500/30 space-y-1.5">
+            <span class="text-[10px] mono uppercase text-red-400">Adversar: Clientul Agresiv</span>
+            <p id="simOpponentMsg" class="text-xs text-slate-100 leading-relaxed font-medium">
+              „Am primit o ofertă cu 25% mai ieftină de la concurență. Dacă nu scazi prețul acum pe loc, semnăm cu ei azi.”
+            </p>
+          </div>
+
+          <textarea id="simUserReply" rows="3" placeholder="Scrie replica ta aici..." class="w-full bg-slate-950 text-xs text-white p-3 rounded-xl border border-slate-800 focus:outline-none focus:border-amber-500"></textarea>
+
+          <button onclick="evaluateSparring()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-extrabold text-xs tracking-wide">
+            ⚡ EVALUEAZĂ FORȚA REPLICII MELE
+          </button>
+
+          <div id="simFeedbackBox" class="hidden bg-slate-950 p-3.5 rounded-xl border border-cyan-500/40 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-cyan-400">Scor Poziție de Forță:</span>
+              <span id="simScore" class="mono font-extrabold text-sm text-amber-400">88/100</span>
+            </div>
+            <p id="simFeedbackText" class="text-xs text-slate-300 leading-relaxed"></p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 w-full max-w-md glass-card border-t border-slate-800/90 px-4 py-2 flex justify-around items-center z-30">
+      <button onclick="switchTab('decoder', this)" class="nav-btn flex flex-col items-center gap-1 text-amber-400 py-1 px-3">
+        <span class="text-lg">🎯</span>
+        <span class="text-[11px] font-semibold">Decodor</span>
+      </button>
+      <button onclick="switchTab('dossiers', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 py-1 px-3">
+        <span class="text-lg">📁</span>
+        <span class="text-[11px] font-medium">Dosare Țintă</span>
+      </button>
+      <button onclick="switchTab('simulator', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 py-1 px-3">
+        <span class="text-lg">🥊</span>
+        <span class="text-[11px] font-medium">Sparring</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- MODAL: GEMINI API KEY -->
+  <div id="apiModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="glass-card max-w-sm w-full rounded-2xl p-5 border border-slate-700 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-sm text-white">🔑 Conectare Google Gemini API</h3>
+        <button onclick="closeApiModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Introdu cheia ta din <strong>Google AI Studio</strong> (model <code class="text-amber-400">gemini-2.5-flash</code>). Cheia rămâne salvată exclusiv local pe telefonul tău. Fără cheie, aplicația rulează în modul Demo Inteligent.
+      </p>
+      <input id="apiKeyInput" type="password" placeholder="AIzaSy..." class="w-full bg-slate-950 text-xs text-white p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 mono" />
+      <div class="flex gap-2">
+        <button onclick="saveApiKey()" class="flex-1 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Salvează Cheia</button>
+        <button onclick="closeApiModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs">Închide</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: FREEMIUM PAYWALL -->
+  <div id="paywallModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="glass-card max-w-sm w-full rounded-2xl p-6 border border-amber-500/40 space-y-4 text-center">
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-2xl">
+        👑
+      </div>
+      <h3 class="font-extrabold text-base text-white">Deblochează SUBTEXT PRO</h3>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Controlează orice negociere și citește printre rânduri fără limite zilnice.
+      </p>
+      <ul class="text-xs text-left space-y-2 bg-slate-950/90 p-3.5 rounded-xl border border-slate-800 text-slate-200">
+        <li>✅ <strong>Decodări Nelimitate</strong> (Text & Screenshot WhatsApp)</li>
+        <li>✅ <strong>Dosare de Țintă Nelimitate</strong> cu detecție de tipar</li>
+        <li>✅ <strong>Sparring Tactic Nelimitat</strong> pentru negocieri grele</li>
+      </ul>
+      <button onclick="activateProSimulation()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-xs gold-glow">
+        ACTIVEAZĂ PRO (Simulare Gratuită)
+      </button>
+      <button onclick="closePaywallModal()" class="text-xs text-slate-400 hover:text-white block mx-auto">Mai târziu</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-bold text-xs px-4 py-2 rounded-full shadow-lg z-50">
+    Copiat în clipboard!
+  </div>
+
+  <script>
+    let currentContext = 'Negociere & Vânzări';
+    let uploadedImageBase64 = null;
+    let uploadedImageMime = null;
+    let freeUsesLeft = parseInt(localStorage.getItem('subtext_free_uses') ?? '2');
+    let isPro = localStorage.getItem('subtext_is_pro') === 'true';
+    let dossiers = JSON.parse(localStorage.getItem('subtext_dossiers') || '[]');
+
+    const presets = {
+      client: {
+        context: 'Negociere & Vânzări',
+        text: 'Sincer, oferta voastră e mult peste ce am bugetat noi. Am discutat intern și dacă nu puteți lăsa măcar un 20% jos și să includeți livrarea gratuită săptămâna asta, va trebui să mergem cu altcineva.'
+      },
+      boss: {
+        context: 'Șef / Corporație',
+        text: 'Știu că e vineri ora 17:30, dar clientul mare vrea prezentarea refăcută până luni la 9 dimineața. Nu e obligatoriu să stai peste program, dar să știi că luni evaluăm cine se implică cu adevărat în echipă.'
+      },
+      partner: {
+        context: 'Relații & Personal',
+        text: 'Nu am nimic, ți-am zis că e totul ok. Du-te liniștit cu prietenii tăi, nu contează că eu aveam impresia că petrecem seara împreună. Chiar mă bucur că tu te distrezi.'
+      }
+    };
+
+    const fallbackAnalyses = {
+      client: {
+        tactic: 'Ancorare + Urgență Falsă',
+        score: 84,
+        hiddenIntent: 'Clientul este deja convins de calitatea ofertei tale (altfel nu își pierdea timpul să negocieze vineri), dar încearcă să smulgă o concesie unilaterală înainte de semnare combinând amenințarea plecării cu presiunea de timp.',
+        weakPoint: 'Dacă avea o alternativă mai bună și mai ieftină gata de semnat, nu îți mai cerea ție reducere. Timpul îl presează pe el, nu pe tine.',
+        diplomatic: 'Înțeleg constrângerea de buget. Ca să ne încadrăm în suma voastră fără să compromitem calitatea de bază, putem elimina modulul X din pachet și păstrăm livrarea standard. Cum preferați să ajustăm?',
+        dominant: 'Prețul reflectă exact nivelul de execuție și garanția pe care nu le veți găsi la variantele cu 20% mai ieftine. Putem bloca livrarea prioritară săptămâna aceasta la tariful standard dacă confirmăm azi.',
+        socratic: 'Dacă lăsăm prețul la o parte pentru o secundă, ce anume din oferta noastră v-a făcut să vă doriți să lucrați totuși cu noi și nu cu cealaltă variantă?'
+      },
+      boss: {
+        tactic: 'Șantaj Emoțional & Vinovăție',
+        score: 91,
+        hiddenIntent: 'Evită să îți dea o sarcină oficială de ore suplimentare (ca să nu își asume responsabilitatea), dar folosește frica legată de evaluarea ta profesională pentru a te face să muncești voluntar în weekend.',
+        weakPoint: 'A formulat cererea ambiguu („nu e obligatoriu”). Dacă îi ceri clarificări concrete și resurse în scris, îi dezamorsezi presiunea subtilă.',
+        diplomatic: 'Vreau ca prezentarea de luni să iasă impecabil. Ca să o pot prioritiza acum peste weekend, îmi poți confirma pe scurt cele 2-3 puncte exacte pe care le vrea modificate clientul și cum compensăm orele săptămâna viitoare?',
+        dominant: 'Am deja weekendul planificat, însă luni la ora 08:00 mă ocup exclusiv de refacerea prezentării. Dacă îmi lași acum feedback-ul punctual al clientului, la 09:15 avem versiunea nouă pe masă.',
+        socratic: 'Ca să nu muncim în orb în weekend și să schimbăm ce nu trebuie: care este exact obiecția principală a clientului față de versiunea actuală?'
+      },
+      partner: {
+        tactic: 'Martirizare Pasiv-Agresivă',
+        score: 88,
+        hiddenIntent: 'Îți transmite o aprobare verbală falsă („du-te liniștit”), dar îți plantează o capcană de vinovăție ca să îți strice ieșirea sau să te facă să anulezi din proprie inițiativă.',
+        weakPoint: 'Se bazează pe faptul că vei intra în defensivă sau te vei certa pe tonul mesajului, în loc să răspunzi strict la cuvintele spuse.',
+        diplomatic: 'Simt că te-a deranjat situația și îmi pare rău că nu ne-am sincronizat mai clar pe programul din seara asta. Hai să stabilim de acum că mâine seară ieșim doar noi doi, fără telefoane.',
+        dominant: 'Dacă îmi spui că e totul în regulă, te voi crede pe cuvânt și ne vedem când mă întorc. Dacă însă te deranjează ceva, prefer să îmi spui direct acum, nu prin aluzii.',
+        socratic: 'Vreau să fiu sigur că ne înțelegem: îmi spui că e în regulă pentru că chiar ești ok cu asta, sau ai fi vrut să îmi spui direct să rămân acasă?'
+      }
+    };
+
+    function initApp() {
+      updateProBadge();
+      renderDossiers();
+      const savedKey = localStorage.getItem('subtext_gemini_key');
+      if (savedKey) {
+        document.getElementById('apiKeyInput').value = savedKey;
+        document.getElementById('apiStatusBtn').classList.add('border-emerald-500', 'text-emerald-400');
+      }
+    }
+
+    function updateProBadge() {
+      const badge = document.getElementById('proBadge');
+      if (isPro) {
+        badge.textContent = 'PRO ACTIV';
+        badge.className = 'text-[10px] mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold';
+      } else {
+        badge.textContent = `FREE ${freeUsesLeft}/2`;
+      }
+    }
+
+    function selectContext(ctx, btn) {
+      currentContext = ctx;
+      document.querySelectorAll('.ctx-btn').forEach(b => {
+        b.className = 'ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition';
+      });
+      btn.className = 'ctx-btn active-ctx text-xs py-2 px-2 rounded-xl border border-amber-500 bg-amber-500/15 text-amber-300 font-semibold transition';
+    }
+
+    function loadPreset(type) {
+      const p = presets[type];
+      document.getElementById('messageInput').value = p.text;
+      currentContext = p.context;
+      document.getElementById('messageInput').dataset.preset = type;
+    }
+
+    function clearDecoder() {
+      document.getElementById('messageInput').value = '';
+      document.getElementById('messageInput').dataset.preset = '';
+      removeImage();
+      document.getElementById('resultsContainer').classList.add('hidden');
+    }
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      uploadedImageMime = file.type;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        uploadedImageBase64 = dataUrl.split(',')[1];
+        document.getElementById('imagePreview').src = dataUrl;
+        document.getElementById('imagePreviewContainer').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeImage() {
+      uploadedImageBase64 = null;
+      uploadedImageMime = null;
+      document.getElementById('imageInput').value = '';
+      document.getElementById('imagePreviewContainer').classList.add('hidden');
+    }
+
+    async function runSubtextAnalysis() {
+      const text = document.getElementById('messageInput').value.trim();
+      if (!text && !uploadedImageBase64) {
+        showToast('Introdu un mesaj sau încarcă un screenshot!');
+        return;
+      }
+
+      if (!isPro && freeUsesLeft <= 0) {
+        openPaywallModal();
+        return;
+      }
+
+      document.getElementById('loadingBox').classList.remove('hidden');
+      document.getElementById('resultsContainer').classList.add('hidden');
+
+      const apiKey = localStorage.getItem('subtext_gemini_key');
+      let analysisResult = null;
+
+      if (apiKey) {
+        try {
+          analysisResult = await callGeminiAPI(apiKey, text, currentContext);
+        } catch (err) {
+          console.error(err);
+          showToast('Eroare API — se folosește analiza tactică locală');
+        }
+      }
+
+      if (!analysisResult) {
+        await new Promise(r => setTimeout(r, 950));
+        const presetKey = document.getElementById('messageInput').dataset.preset;
+        if (presetKey && fallbackAnalyses[presetKey]) {
+          analysisResult = fallbackAnalyses[presetKey];
+        } else {
+          analysisResult = generateSmartHeuristicAnalysis(text);
+        }
+      }
+
+      if (!isPro) {
+        freeUsesLeft = Math.max(0, freeUsesLeft - 1);
+        localStorage.setItem('subtext_free_uses', freeUsesLeft.toString());
+        updateProBadge();
+      }
+
+      displayResults(analysisResult, text);
+      document.getElementById('loadingBox').classList.add('hidden');
+      document.getElementById('resultsContainer').classList.remove('hidden');
+    }
+
+    async function callGeminiAPI(apiKey, text, context) {
+      const prompt = `Ești SUBTEXT, un decodor psihologic de elită și expert în negociere (stilul Chris Voss / analiză tranzacțională).
+Contextul interacțiunii: ${context}.
+Analizează mesajul primit (sau imaginea atașată) și returnează EXCLUSIV un obiect JSON valid (fără markdown \`\`\`json) cu următoarea structură:
+{
+  "tactic": "Numele scurt al tacticii folosite (max 4 cuvinte)",
+  "score": număr întreg între 10 și 99 reprezentând nivelul de presiune/manipulare,
+  "hiddenIntent": "2 propoziții clare și tăioase despre ce urmărește în realitate interlocutorul.",
+  "weakPoint": "1-2 propoziții despre punctul lui slab și unde ai tu pârghia de putere.",
+  "diplomatic": "Replică diplomatică dar fermă, naturală, gata de trimis.",
+  "dominant": "Replică dominantă, scurtă, care taie manipularea și impune limite.",
+  "socratic": "Replică sub formă de întrebare calibrată care îi întoarce presiunea."
+}
+Mesajul de analizat: "${text}"`;
+
+      const parts = [{ text: prompt }];
+      if (uploadedImageBase64) {
+        parts.push({
+          inline_data: {
+            mime_type: uploadedImageMime || 'image/jpeg',
+            data: uploadedImageBase64
+          }
+        });
+      }
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts }],
+          generationConfig: { responseMimeType: "application/json" }
+        })
+      });
+
+      if (!response.ok) throw new Error('Gemini API error');
+      const data = await response.json();
+      const rawText = data.candidates[0].content.parts[0].text;
+      return JSON.parse(rawText);
+    }
+
+    function generateSmartHeuristicAnalysis(text) {
+      const lower = text.toLowerCase();
+      if (lower.includes('scump') || lower.includes('buget') || lower.includes('reducere') || lower.includes('preț')) {
+        return fallbackAnalyses.client;
+      }
+      if (lower.includes('urgent') || lower.includes('luni') || lower.includes('echip') || lower.includes('program')) {
+        return fallbackAnalyses.boss;
+      }
+      return {
+        tactic: 'Testare de Limite & Presiune',
+        score: 76,
+        hiddenIntent: 'Interlocutorul aruncă o momeală emoțională sau o presiune subtilă pentru a vedea dacă intri în defensivă și începi să te justifici.',
+        weakPoint: 'Cine se justifică pierde poziția de forță. Dacă răspunzi scurt și îi ceri să fie specific, preiei instantaneu controlul.',
+        diplomatic: 'Am notat punctul tău de vedere. Ca să mergem înainte eficient și fără confuzii, spune-mi exact care este propunerea ta concretă.',
+        dominant: 'Prefer să discutăm direct pe fapte și soluții concrete. Spune-mi exact ce aștepți de la mine în acest punct și îți spun ce este fezabil.',
+        socratic: 'Care este rezultatul exact pe care încerci să îl obții prin acest mesaj?'
+      };
+    }
+
+    function displayResults(res, originalText) {
+      document.getElementById('resTacticBadge').textContent = res.tactic;
+      document.getElementById('resScoreText').textContent = `${res.score}%`;
+      document.getElementById('resScoreBar').style.width = `${res.score}%`;
+      document.getElementById('resHiddenIntent').textContent = res.hiddenIntent;
+      document.getElementById('resWeakPoint').textContent = res.weakPoint;
+      document.getElementById('replyDiplomatic').textContent = res.diplomatic;
+      document.getElementById('replyDominant').textContent = res.dominant;
+      document.getElementById('replySocratic').textContent = res.socratic;
+
+      const dossierId = document.getElementById('dossierSelect').value;
+      if (dossierId) {
+        const d = dossiers.find(x => x.id === dossierId);
+        if (d) {
+          d.history.unshift({
+            date: new Date().toLocaleDateString('ro-RO'),
+            tactic: res.tactic,
+            score: res.score,
+            snippet: originalText ? originalText.slice(0, 60) + '...' : '[Screenshot analizat]'
+          });
+          localStorage.setItem('subtext_dossiers', JSON.stringify(dossiers));
+          renderDossiers();
+        }
+      }
+    }
+
+    function copyReply(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text);
+      showToast('Replică copiată în clipboard!');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 2200);
+    }
+
+    function addDossier() {
+      const nameInput = document.getElementById('newDossierName');
+      const name = nameInput.value.trim();
+      if (!name) return;
+      dossiers.unshift({
+        id: 'd_' + Date.now(),
+        name,
+        history: []
+      });
+      localStorage.setItem('subtext_dossiers', JSON.stringify(dossiers));
+      nameInput.value = '';
+      renderDossiers();
+      showToast('Dosar creat!');
+    }
+
+    function renderDossiers() {
+      const select = document.getElementById('dossierSelect');
+      const list = document.getElementById('dossierList');
+      select.innerHTML = '<option value="">Fără dosar (Analiză rapidă)</option>';
+      list.innerHTML = '';
+
+      if (dossiers.length === 0) {
+        list.innerHTML = '<div class="text-center text-xs text-slate-500 py-8">Niciun dosar creat încă. Adaugă un interlocutor mai sus.</div>';
+        return;
+      }
+
+      dossiers.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id;
+        opt.textContent = d.name;
+        select.appendChild(opt);
+
+        const avgScore = d.history.length
+          ? Math.round(d.history.reduce((a, b) => a + b.score, 0) / d.history.length)
+          : 0;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-4 border border-slate-800 space-y-2.5';
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <h4 class="font-bold text-sm text-amber-300">👤 ${d.name}</h4>
+            <span class="text-[11px] mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">
+              ${d.history.length} interacțiuni | Medie presiune: ${avgScore}%
+            </span>
+          </div>
+          <div class="space-y-1.5">
+            ${d.history.length === 0 ? '<p class="text-xs text-slate-500">Nicio analiză salvată încă.</p>' : d.history.slice(0, 3).map(h => `
+              <div class="bg-slate-950 p-2 rounded-lg border border-slate-800/80 flex justify-between items-center text-xs">
+                <span class="text-slate-300 truncate max-w-[65%]">${h.snippet}</span>
+                <span class="text-red-400 font-semibold mono text-[10px]">${h.tactic} (${h.score}%)</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function evaluateSparring() {
+      const reply = document.getElementById('simUserReply').value.trim();
+      if (!reply) {
+        showToast('Scrie o replică pentru a primi scorul!');
+        return;
+      }
+      const box = document.getElementById('simFeedbackBox');
+      const scoreEl = document.getElementById('simScore');
+      const textEl = document.getElementById('simFeedbackText');
+
+      const hasQuestion = reply.includes('?');
+      const isApologetic = /scuze|îmi pare rău|poate putem/i.test(reply);
+
+      let score = 75;
+      let feedback = '';
+
+      if (isApologetic) {
+        score = 48;
+        feedback = '⚠️ Ai intrat în defensivă. Când folosești formulări ezitante în fața unui bluff de preț, confirmi că tariful tău era umflat. Taie scuzele și leagă orice reducere de renunțarea la un beneficiu.';
+      } else if (hasQuestion) {
+        score = 94;
+        feedback = '🔥 Excelent! Ai folosit o întrebare calibrată și ai mutat presiunea înapoi pe umerii clientului. Cine pune întrebarea conduce conversația.';
+      } else {
+        score = 82;
+        feedback = '✅ Poziție fermă. Nu ai cedat la șantajul de preț. Pentru nota 100, încheie replica cu o întrebare scurtă care îl obligă să își justifice comparația.';
+      }
+
+      scoreEl.textContent = `${score}/100`;
+      textEl.textContent = feedback;
+      box.classList.remove('hidden');
+    }
+
+    function switchTab(tabName, btn) {
+      ['decoder', 'dossiers', 'simulator'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+      });
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.className = 'nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 py-1 px-3';
+      });
+      btn.className = 'nav-btn flex flex-col items-center gap-1 text-amber-400 py-1 px-3';
+    }
+
+    function openApiModal() { document.getElementById('apiModal').classList.remove('hidden'); }
+    function closeApiModal() { document.getElementById('apiModal').classList.add('hidden'); }
+    function saveApiKey() {
+      const k = document.getElementById('apiKeyInput').value.trim();
+      if (k) {
+        localStorage.setItem('subtext_gemini_key', k);
+        document.getElementById('apiStatusBtn').classList.add('border-emerald-500', 'text-emerald-400');
+        showToast('Cheia Gemini API a fost salvată!');
+      } else {
+        localStorage.removeItem('subtext_gemini_key');
+        showToast('Mod Demo activat');
+      }
+      closeApiModal();
+    }
+
+    function openPaywallModal() { document.getElementById('paywallModal').classList.remove('hidden'); }
+    function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
+    function activateProSimulation() {
+      isPro = true;
+      localStorage.setItem('subtext_is_pro', 'true');
+      updateProBadge();
+      closePaywallModal();
+      showToast('SUBTEXT PRO Activat!');
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
