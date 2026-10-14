@@ -7,6 +7,16 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>SUBTEXT — Decodor Psihologic & Replici Tactice</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" href="https://placehold.co/192x192/F59E0B/08090E.png?text=S&font=montserrat" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW error:', err));
+      });
+    }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
@@ -61,7 +71,7 @@
             <h1 class="font-extrabold tracking-tight text-base text-white">SUBTEXT</h1>
             <span id="proBadge" class="text-[10px] mono uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold">PRO ACTIV</span>
           </div>
-          <p id="aiStatusSubtitle" class="text-[11px] text-amber-400 font-medium">v1.6 • Apasă 🔑 pentru activare</p>
+          <p id="aiStatusSubtitle" class="text-[11px] text-amber-400 font-medium">v2.0 • Store & PWA Ready</p>
         </div>
       </div>
 
@@ -85,7 +95,7 @@
         <div class="space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mono">Exemple Rapide</span>
-            <button onclick="clearDecoder()" class="text-[11px] text-slate-400 hover:text-amber-400">Șterge textul</button>
+            <button onclick="clearDecoder()" class="text-[11px] text-slate-400 hover:text-amber-400">Șterge tot</button>
           </div>
           <div class="flex gap-2 overflow-x-auto pb-1">
             <button onclick="loadPreset('client')" class="shrink-0 text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:border-amber-500/60 transition">
@@ -139,7 +149,7 @@
             <button onclick="removeImage()" class="absolute top-2 right-2 bg-red-600/90 text-white text-xs px-2 py-0.5 rounded-md">✕</button>
           </div>
 
-          <textarea id="messageInput" rows="4" placeholder="Lipește aici mesajul primit pe WhatsApp, Grup, Email sau SMS..." class="w-full bg-slate-950/90 text-sm text-slate-100 placeholder-slate-500 rounded-xl p-3 border border-slate-800 focus:outline-none focus:border-amber-500/70 resize-none"></textarea>
+          <textarea id="messageInput" rows="4" placeholder="Lipește aici mesajul primit pe WhatsApp, Grup, Email sau SMS (sau încarcă direct un screenshot mai sus)..." class="w-full bg-slate-950/90 text-sm text-slate-100 placeholder-slate-500 rounded-xl p-3 border border-slate-800 focus:outline-none focus:border-amber-500/70 resize-none"></textarea>
 
           <button onclick="runSubtextAnalysis()" id="analyzeBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-sm tracking-wide gold-glow hover:brightness-110 active:scale-[0.99] transition flex items-center justify-center gap-2">
             <span>🎯 DECODEAZĂ SUBTEXTUL</span>
@@ -158,8 +168,8 @@
         <!-- Loading State -->
         <div id="loadingBox" class="hidden glass-card rounded-2xl p-6 text-center space-y-3 border border-amber-500/30">
           <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Gemini Flash Latest analizează mesajul tău...</p>
-          <p class="text-xs text-slate-400">Calibrare psihologică & retorică la obiect</p>
+          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Gemini 3.0 Flash decodează subtextul...</p>
+          <p class="text-xs text-slate-400">Extracție tactică & generare replici</p>
         </div>
 
         <!-- RESULTS CONTAINER -->
@@ -279,456 +289,5 @@
               <span id="simScore" class="mono font-extrabold text-sm text-amber-400">88/100</span>
             </div>
             <p id="simFeedbackText" class="text-xs text-slate-300 leading-relaxed"></p>
-          </div>
-        </div>
-      </section>
 
-    </main>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="fixed bottom-0 w-full max-w-md glass-card border-t border-slate-800/90 px-4 py-2 flex justify-around items-center z-30">
-      <button onclick="switchTab('decoder', this)" class="nav-btn flex flex-col items-center gap-1 text-amber-400 py-1 px-3">
-        <span class="text-lg">🎯</span>
-        <span class="text-[11px] font-semibold">Decodor</span>
-      </button>
-      <button onclick="switchTab('dossiers', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 py-1 px-3">
-        <span class="text-lg">📁</span>
-        <span class="text-[11px] font-medium">Dosare Țintă</span>
-      </button>
-      <button onclick="switchTab('simulator', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 py-1 px-3">
-        <span class="text-lg">🥊</span>
-        <span class="text-[11px] font-medium">Sparring</span>
-      </button>
-    </nav>
-
-  </div>
-
-  <!-- MODAL: GEMINI API KEY -->
-  <div id="apiModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="glass-card max-w-sm w-full rounded-2xl p-5 border border-slate-700 space-y-4">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-sm text-white">🔑 Conectare Google Gemini API (v1.6)</h3>
-        <button onclick="closeApiModal()" class="text-slate-400 hover:text-white">✕</button>
-      </div>
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Lipește cheia ta (<code class="text-emerald-400">AQ.Ab8...</code> sau <code class="text-amber-400">AIzaSy...</code>). Cheia se salvează exclusiv în memoria privată a telefonului tău.
-      </p>
-      <input id="apiKeyInput" type="text" autocomplete="off" spellcheck="false" placeholder="AQ.Ab8... sau AIzaSy..." class="w-full bg-slate-950 text-xs text-amber-300 p-3 rounded-xl border border-slate-700 focus:outline-none focus:border-amber-500 mono" />
-      <div id="apiTestStatus" class="hidden text-xs p-2.5 rounded-lg leading-relaxed mono"></div>
-      <div class="flex gap-2">
-        <button onclick="saveAndTestApiKey()" id="saveKeyBtn" class="flex-1 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs">Salvează și Testează Cheia</button>
-        <button onclick="closeApiModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs">Închide</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: FREEMIUM PAYWALL -->
-  <div id="paywallModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="glass-card max-w-sm w-full rounded-2xl p-6 border border-amber-500/40 space-y-4 text-center">
-      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-2xl">
-        👑
-      </div>
-      <h3 class="font-extrabold text-base text-white">SUBTEXT PRO ESTE ACTIV</h3>
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Ai acces nelimitat la toate funcțiile de decodare psihologică, screenshot-uri și dosare.
-      </p>
-      <button onclick="closePaywallModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-xs gold-glow">
-        ÎNCHIDE
-      </button>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-bold text-xs px-4 py-2 rounded-full shadow-lg z-50">
-    Copiat în clipboard!
-  </div>
-
-  <script>
-    let currentContext = 'Negociere & Vânzări';
-    let uploadedImageBase64 = null;
-    let uploadedImageMime = null;
-    let dossiers = JSON.parse(localStorage.getItem('subtext_dossiers') || '[]');
-
-    const presets = {
-      client: {
-        context: 'Negociere & Vânzări',
-        text: 'Sincer, oferta voastră e mult peste ce am bugetat noi. Am discutat intern și dacă nu puteți lăsa măcar un 20% jos și să includeți livrarea gratuită săptămâna asta, va trebui să mergem cu altcineva.'
-      },
-      boss: {
-        context: 'Șef / Corporație / Ședință de Proprietari',
-        text: 'Știu că e vineri ora 17:30, dar clientul mare vrea prezentarea refăcută până luni la 9 dimineața. Nu e obligatoriu să stai peste program, dar să știi că luni evaluăm cine se implică cu adevărat în echipă.'
-      },
-      partner: {
-        context: 'Relații & Personal',
-        text: 'Nu am nimic, ți-am zis că e totul ok. Du-te liniștit cu prietenii tăi, nu contează că eu aveam impresia că petrecem seara împreună. Chiar mă bucur că tu te distrezi.'
-      }
-    };
-
-    function initApp() {
-      renderDossiers();
-      const savedKey = getCleanApiKey();
-      updateKeyVisualState(!!savedKey);
-      if (savedKey) {
-        document.getElementById('apiKeyInput').value = savedKey;
-      }
-    }
-
-    function getCleanApiKey() {
-      const raw = localStorage.getItem('subtext_gemini_key') || '';
-      return raw.replace(/\s+/g, '').trim();
-    }
-
-    function updateKeyVisualState(hasKey) {
-      const btn = document.getElementById('apiStatusBtn');
-      const sub = document.getElementById('aiStatusSubtitle');
-      if (hasKey) {
-        btn.className = 'p-2 rounded-lg bg-emerald-500/20 border border-emerald-500 text-emerald-400 transition';
-        sub.textContent = '🟢 Gemini Flash Latest Conectat (v1.6)';
-        sub.className = 'text-[11px] text-emerald-400 font-medium';
-      } else {
-        btn.className = 'p-2 rounded-lg bg-red-500/20 border border-red-500/60 text-red-300 pulse-ring transition';
-        sub.textContent = '🔴 Apasă 🔑 pentru a salva cheia Gemini';
-        sub.className = 'text-[11px] text-amber-400 font-medium';
-      }
-    }
-
-    function selectContext(ctx, btn) {
-      currentContext = ctx;
-      document.querySelectorAll('.ctx-btn').forEach(b => {
-        b.className = 'ctx-btn text-xs py-2 px-2 rounded-xl border border-slate-800 bg-slate-900/70 text-slate-400 font-medium transition';
-      });
-      btn.className = 'ctx-btn active-ctx text-xs py-2 px-2 rounded-xl border border-amber-500 bg-amber-500/15 text-amber-300 font-semibold transition';
-    }
-
-    function loadPreset(type) {
-      const p = presets[type];
-      document.getElementById('messageInput').value = p.text;
-      currentContext = p.context;
-    }
-
-    function clearDecoder() {
-      document.getElementById('messageInput').value = '';
-      removeImage();
-      document.getElementById('resultsContainer').classList.add('hidden');
-      document.getElementById('errorBox').classList.add('hidden');
-    }
-
-    function handleImageUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      uploadedImageMime = file.type;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const dataUrl = evt.target.result;
-        uploadedImageBase64 = dataUrl.split(',')[1];
-        document.getElementById('imagePreview').src = dataUrl;
-        document.getElementById('imagePreviewContainer').classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function removeImage() {
-      uploadedImageBase64 = null;
-      uploadedImageMime = null;
-      document.getElementById('imageInput').value = '';
-      document.getElementById('imagePreviewContainer').classList.add('hidden');
-    }
-
-    async function callGeminiFlashLatest(apiKey, promptText, includeImage = true) {
-      const modelsToTry = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-2.0-flash'];
-      let lastErr = null;
-
-      for (const modelName of modelsToTry) {
-        try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`;
-          const parts = [{ text: promptText }];
-          if (includeImage && uploadedImageBase64) {
-            parts.push({
-              inline_data: {
-                mime_type: uploadedImageMime || 'image/jpeg',
-                data: uploadedImageBase64
-              }
-            });
-          }
-
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-goog-api-key': apiKey
-            },
-            body: JSON.stringify({
-              contents: [{ parts }]
-            })
-          });
-
-          const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data?.error?.message || `HTTP ${response.status}`);
-          }
-
-          const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          if (!rawText) throw new Error('Răspuns gol de la model');
-          return rawText;
-        } catch (err) {
-          lastErr = err;
-        }
-      }
-      throw lastErr || new Error('Nu s-a putut contacta serverul Gemini.');
-    }
-
-    async function runSubtextAnalysis() {
-      const text = document.getElementById('messageInput').value.trim();
-      if (!text && !uploadedImageBase64) {
-        showToast('Introdu un mesaj sau încarcă un screenshot!');
-        return;
-      }
-
-      const apiKey = getCleanApiKey();
-      if (!apiKey) {
-        openApiModal();
-        showToast('Lipește cheia în fereastra 🔑!');
-        return;
-      }
-
-      document.getElementById('errorBox').classList.add('hidden');
-      document.getElementById('loadingBox').classList.remove('hidden');
-      document.getElementById('resultsContainer').classList.add('hidden');
-
-      const prompt = `Ești SUBTEXT, un decodor psihologic de elită, strateg în comunicare și expert în negociere (stilul Chris Voss / analiză tranzacțională).
-Contextul interacțiunii: ${currentContext}.
-
-Analizează SPECIFIC mesajul de mai jos (și/sau imaginea atașată), referindu-te direct la subiectul, cuvintele și detaliile din mesajul utilizatorului (de exemplu: dacă vorbește despre ședințe de proprietari, WhatsApp, costuri, termene sau reproșuri, referă-te exact la acele lucruri!). NU da răspunsuri generice!
-
-Returnează EXCLUSIV un obiect JSON valid (fără blocuri markdown \`\`\`json și fără niciun alt text înainte sau după) cu exact această structură:
-{
-  "tactic": "Numele scurt al tacticii psihologice folosite în acest mesaj (max 4 cuvinte)",
-  "score": 85,
-  "hiddenIntent": "2 propoziții clare, specifice pe subiectul mesajului, despre ce urmărește în realitate interlocutorul și ce încearcă să insinueze.",
-  "weakPoint": "1-2 propoziții aplicate pe situație despre punctul lui slab și unde ai tu pârghia de putere.",
-  "diplomatic": "Replică diplomatică, calmă dar fermă, adaptată exact la subiectul mesajului, gata de trimis pe WhatsApp/Email.",
-  "dominant": "Replică scurtă, dominantă, care taie ironia sau manipularea la rădăcină și impune respect pe subiectul discutat.",
-  "socratic": "Replică sub formă de întrebare calculată care îl obligă pe interlocutor să își justifice afirmația în fața ta sau a grupului."
-}
-
-Mesajul exact de analizat:
-"""
-${text}
-"""`;
-
-      try {
-        let rawResponse = await callGeminiFlashLatest(apiKey, prompt, true);
-        rawResponse = rawResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
-
-        const firstBrace = rawResponse.indexOf('{');
-        const lastBrace = rawResponse.lastIndexOf('}');
-        if (firstBrace !== -1 && lastBrace !== -1) {
-          rawResponse = rawResponse.slice(firstBrace, lastBrace + 1);
-        }
-
-        const parsed = JSON.parse(rawResponse);
-        displayResults(parsed, text);
-        document.getElementById('loadingBox').classList.add('hidden');
-        document.getElementById('resultsContainer').classList.remove('hidden');
-      } catch (err) {
-        console.error(err);
-        document.getElementById('loadingBox').classList.add('hidden');
-        document.getElementById('errorText').textContent = `Detalii: ${err.message}`;
-        document.getElementById('errorBox').classList.remove('hidden');
-      }
-    }
-
-    function displayResults(res, originalText) {
-      document.getElementById('resTacticBadge').textContent = res.tactic || 'Analiză Tactică';
-      const scoreVal = Math.min(99, Math.max(5, parseInt(res.score) || 75));
-      document.getElementById('resScoreText').textContent = `${scoreVal}%`;
-      document.getElementById('resScoreBar').style.width = `${scoreVal}%`;
-      document.getElementById('resHiddenIntent').textContent = res.hiddenIntent || '';
-      document.getElementById('resWeakPoint').textContent = res.weakPoint || '';
-      document.getElementById('replyDiplomatic').textContent = res.diplomatic || '';
-      document.getElementById('replyDominant').textContent = res.dominant || '';
-      document.getElementById('replySocratic').textContent = res.socratic || '';
-
-      const dossierId = document.getElementById('dossierSelect').value;
-      if (dossierId) {
-        const d = dossiers.find(x => x.id === dossierId);
-        if (d) {
-          d.history.unshift({
-            date: new Date().toLocaleDateString('ro-RO'),
-            tactic: res.tactic,
-            score: scoreVal,
-            snippet: originalText ? originalText.slice(0, 60) + '...' : '[Screenshot analizat]'
-          });
-          localStorage.setItem('subtext_dossiers', JSON.stringify(dossiers));
-          renderDossiers();
-        }
-      }
-    }
-
-    function copyReply(elementId) {
-      const text = document.getElementById(elementId).textContent;
-      navigator.clipboard.writeText(text);
-      showToast('Replică copiată în clipboard!');
-    }
-
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.remove('hidden');
-      setTimeout(() => t.classList.add('hidden'), 2400);
-    }
-
-    function addDossier() {
-      const nameInput = document.getElementById('newDossierName');
-      const name = nameInput.value.trim();
-      if (!name) return;
-      dossiers.unshift({
-        id: 'd_' + Date.now(),
-        name,
-        history: []
-      });
-      localStorage.setItem('subtext_dossiers', JSON.stringify(dossiers));
-      nameInput.value = '';
-      renderDossiers();
-      showToast('Dosar creat!');
-    }
-
-    function renderDossiers() {
-      const select = document.getElementById('dossierSelect');
-      const list = document.getElementById('dossierList');
-      select.innerHTML = '<option value="">Fără dosar (Analiză rapidă)</option>';
-      list.innerHTML = '';
-
-      if (dossiers.length === 0) {
-        list.innerHTML = '<div class="text-center text-xs text-slate-500 py-8">Niciun dosar creat încă. Adaugă un interlocutor mai sus.</div>';
-        return;
-      }
-
-      dossiers.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.id;
-        opt.textContent = d.name;
-        select.appendChild(opt);
-
-        const avgScore = d.history.length
-          ? Math.round(d.history.reduce((a, b) => a + b.score, 0) / d.history.length)
-          : 0;
-
-        const card = document.createElement('div');
-        card.className = 'glass-card rounded-2xl p-4 border border-slate-800 space-y-2.5';
-        card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <h4 class="font-bold text-sm text-amber-300">👤 ${d.name}</h4>
-            <span class="text-[11px] mono px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700">
-              ${d.history.length} interacțiuni | Medie presiune: ${avgScore}%
-            </span>
-          </div>
-          <div class="space-y-1.5">
-            ${d.history.length === 0 ? '<p class="text-xs text-slate-500">Nicio analiză salvată încă.</p>' : d.history.slice(0, 3).map(h => `
-              <div class="bg-slate-950 p-2 rounded-lg border border-slate-800/80 flex justify-between items-center text-xs">
-                <span class="text-slate-300 truncate max-w-[65%]">${h.snippet}</span>
-                <span class="text-red-400 font-semibold mono text-[10px]">${h.tactic} (${h.score}%)</span>
-              </div>
-            `).join('')}
-          </div>
-        `;
-        list.appendChild(card);
-      });
-    }
-
-    async function evaluateSparring() {
-      const reply = document.getElementById('simUserReply').value.trim();
-      if (!reply) {
-        showToast('Scrie o replică pentru a primi scorul!');
-        return;
-      }
-      const box = document.getElementById('simFeedbackBox');
-      const scoreEl = document.getElementById('simScore');
-      const textEl = document.getElementById('simFeedbackText');
-
-      const hasQuestion = reply.includes('?');
-      const isApologetic = /scuze|îmi pare rău|poate putem/i.test(reply);
-
-      let score = 75;
-      let feedback = '';
-
-      if (isApologetic) {
-        score = 48;
-        feedback = '⚠️ Ai intrat în defensivă. Când folosești formulări ezitante în fața unui bluff de preț, confirmi că tariful tău era umflat. Taie scuzele și leagă orice reducere de renunțarea la un beneficiu.';
-      } else if (hasQuestion) {
-        score = 94;
-        feedback = '🔥 Excelent! Ai folosit o întrebare calibrată și ai mutat presiunea înapoi pe umerii clientului. Cine pune întrebarea conduce conversația.';
-      } else {
-        score = 82;
-        feedback = '✅ Poziție fermă. Nu ai cedat la șantajul de preț. Pentru nota 100, încheie replica cu o întrebare scurtă care îl obligă să își justifice comparația.';
-      }
-
-      scoreEl.textContent = `${score}/100`;
-      textEl.textContent = feedback;
-      box.classList.remove('hidden');
-    }
-
-    function switchTab(tabName, btn) {
-      ['decoder', 'dossiers', 'simulator'].forEach(t => {
-        document.getElementById('tab-' + t).classList.add('hidden');
-      });
-      document.getElementById('tab-' + tabName).classList.remove('hidden');
-
-      document.querySelectorAll('.nav-btn').forEach(b => {
-        b.className = 'nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 py-1 px-3';
-      });
-      btn.className = 'nav-btn flex flex-col items-center gap-1 text-amber-400 py-1 px-3';
-    }
-
-    function openApiModal() {
-      document.getElementById('apiKeyInput').value = getCleanApiKey();
-      document.getElementById('apiTestStatus').classList.add('hidden');
-      document.getElementById('apiModal').classList.remove('hidden');
-    }
-    function closeApiModal() {
-      document.getElementById('apiModal').classList.add('hidden');
-    }
-
-    async function saveAndTestApiKey() {
-      const rawKey = document.getElementById('apiKeyInput').value;
-      const cleanKey = rawKey.replace(/\s+/g, '').trim();
-      const statusBox = document.getElementById('apiTestStatus');
-      const saveBtn = document.getElementById('saveKeyBtn');
-
-      if (!cleanKey) {
-        localStorage.removeItem('subtext_gemini_key');
-        updateKeyVisualState(false);
-        showToast('Cheia a fost ștearsă');
-        closeApiModal();
-        return;
-      }
-
-      saveBtn.textContent = 'Se testează...';
-      statusBox.className = 'text-xs p-2.5 rounded-lg bg-slate-900 text-amber-300 border border-amber-500/30 mono';
-      statusBox.textContent = 'Se apelează gemini-flash-latest cu X-goog-api-key...';
-      statusBox.classList.remove('hidden');
-
-      try {
-        await callGeminiFlashLatest(cleanKey, 'Răspunde scurt cu OK', false);
-        localStorage.setItem('subtext_gemini_key', cleanKey);
-        updateKeyVisualState(true);
-        statusBox.className = 'text-xs p-2.5 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 mono';
-        statusBox.textContent = '✅ Conectat cu succes pe gemini-flash-latest!';
-        saveBtn.textContent = 'Salvează și Testează Cheia';
-        showToast('Cheia funcționează impecabil!');
-        setTimeout(() => closeApiModal(), 900);
-      } catch (err) {
-        updateKeyVisualState(false);
-        statusBox.className = 'text-xs p-2.5 rounded-lg bg-red-950/80 text-red-300 border border-red-500/40 mono';
-        statusBox.textContent = `❌ Eroare: ${err.message}`;
-        saveBtn.textContent = 'Salvează și Testează Cheia';
-      }
-    }
-
-    function openPaywallModal() { document.getElementById('paywallModal').classList.remove('hidden'); }
-    function closePaywallModal() { document.getElementById('paywallModal').classList.add('hidden'); }
-
-    initApp();
-  </script>
-</body>
-</html>
+            
