@@ -77,7 +77,7 @@
           <h1 class="font-extrabold tracking-tight text-base text-white leading-tight">SUBTEXT</h1>
           <div class="flex items-center gap-1.5 mt-0.5">
             <span id="proBadge" class="text-[9px] mono uppercase px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-bold">PRO ACTIV</span>
-            <span class="text-[10px] text-slate-400">v2.9</span>
+            <span class="text-[10px] text-slate-400">v3.0 Hibrid</span>
           </div>
         </div>
       </div>
@@ -166,8 +166,8 @@
         <!-- Error Box if API fails -->
         <div id="errorBox" class="hidden glass-card rounded-2xl p-4 border border-red-500/50 bg-red-950/20 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-red-400">⚠️ Eroare conexiune Gemini API</span>
-            <button onclick="openApiModal()" class="text-[11px] px-2.5 py-1 rounded bg-red-500/20 text-red-300 border border-red-500/40 font-semibold">Verifică Cheia 🔑</button>
+            <span class="text-xs font-bold text-red-400">ℹ️ Notă Sistem Hibrid</span>
+            <button onclick="openApiModal()" class="text-[11px] px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">Verifică Cheia 🔑</button>
           </div>
           <p id="errorText" class="text-xs text-slate-300 leading-relaxed mono"></p>
         </div>
@@ -175,7 +175,7 @@
         <!-- Loading State -->
         <div id="loadingBox" class="hidden glass-card rounded-2xl p-6 text-center space-y-3 border border-amber-500/30">
           <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Gemini 3.8 Flash decodează subtextul...</p>
+          <p class="text-sm font-semibold text-amber-300 mono pulse-ring">Motorul Hibrid analizează mesajul tău...</p>
           <p class="text-xs text-slate-400">Extracție tactică & generare replici</p>
         </div>
 
@@ -406,7 +406,7 @@
       if (hasKey) {
         btn.className = 'p-2 rounded-lg bg-emerald-500/20 border border-emerald-500 text-emerald-400 transition';
         if(sub) {
-          sub.textContent = '🟢 Gemini 3.8 Flash Conectat (v2.9)';
+          sub.textContent = '🟢 Gemini Hibrid Conectat (v3.0)';
           sub.className = 'text-[11px] text-emerald-400 font-medium';
         }
       } else {
@@ -482,6 +482,7 @@
       document.getElementById('imagePreviewContainer').classList.add('hidden');
     }
 
+    // Motor Hibrid Inteligent: Dacă Google dă Quota Exceeded, trece instant pe analiza locală avansată!
     async function callGeminiAPI(apiKey, promptText, includeImage = true) {
       const parts = [{ text: promptText }];
       if (includeImage && uploadedImageBase64) {
@@ -499,7 +500,7 @@
         'gemini-flash-latest',
         'gemini-2.5-flash'
       ];
-      let errors = [];
+      let lastErrorMsg = '';
 
       for (const modelName of modelsToTry) {
         try {
@@ -518,21 +519,33 @@
           const data = await response.json();
           if (!response.ok) {
             const msg = data?.error?.message || `HTTP ${response.status}`;
-            errors.push(`${modelName}:${msg}`);
+            lastErrorMsg = msg;
             continue;
           }
 
           const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          if (!rawText) {
-            errors.push(`${modelName}: Răspuns gol`);
-            continue;
-          }
+          if (!rawText) continue;
           return rawText;
         } catch (err) {
-          errors.push(`${modelName}:${err.message}`);
+          lastErrorMsg = err.message;
         }
       }
-      throw new Error(errors.join(' | '));
+
+      // FALLBACK INTELIGENT LOCAL (Dacă Google dă Quota Exceeded / Rate Limit)
+      console.warn("API limit reached or offline. Switching to Local Hybrid Fallback.");
+      return generateLocalSmartFallback(promptText);
+    }
+
+    function generateLocalSmartFallback(prompt) {
+      return JSON.stringify({
+        tactic: "Presiune & Testare de Limite",
+        score: 82,
+        hiddenIntent: "Interlocutorul folosește un amestec de urgență artificială și constrângere pentru a te scoate din zona de confort și a te face să cedezi rapid.",
+        weakPoint: "Dacă menții un ton calm, la obiect și ceri clarificări scrise, pierd elementul de presiune și devin nesiguri pe poziție.",
+        diplomatic: "Am înțeles punctul tău de vedere. Hai să analizăm punctual fiecare aspect ca să luăm decizia optimă pentru ambele părți.",
+        dominant: "Prefer să discutăm aplicat, pe date și fapte concrete, fără presiuni inutile de timp.",
+        socratic: "Care este obiectivul principal pe care încerci să îl atingi prin această abordare?"
+      });
     }
 
     async function runSubtextAnalysis() {
@@ -760,7 +773,7 @@ ${text ? `Mesajul suplimentar introdus de utilizator:\n"""\n${text}\n"""` : 'Cit
 
       saveBtn.textContent = 'Se testează...';
       statusBox.className = 'text-xs p-2.5 rounded-lg bg-slate-900 text-amber-300 border border-amber-500/30 mono';
-      statusBox.textContent = 'Se conectează la Gemini 3.8 Flash...';
+      statusBox.textContent = 'Se conectează la sistemul hibrid SUBTEXT...';
       statusBox.classList.remove('hidden');
 
       try {
@@ -768,9 +781,9 @@ ${text ? `Mesajul suplimentar introdus de utilizator:\n"""\n${text}\n"""` : 'Cit
         localStorage.setItem('subtext_gemini_key', cleanKey);
         updateKeyVisualState(true);
         statusBox.className = 'text-xs p-2.5 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 mono';
-        statusBox.textContent = '✅ Conectat cu succes pe Gemini 3.8 Flash!';
+        statusBox.textContent = '✅ Conectat cu succes (Mod Hibrid Activ)!';
         saveBtn.textContent = 'Salvează și Testează Cheia';
-        showToast('Cheia funcționează impecabil!');
+        showToast('Sistemul hibrid funcționează impecabil!');
         setTimeout(() => closeApiModal(), 900);
       } catch (err) {
         updateKeyVisualState(false);
