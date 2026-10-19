@@ -22,242 +22,35 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 3. Configurare Android SDK
-        uses: android-actions/setup-android@v3
+      - name: 3. Configurare Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
 
-      - name: 4. Generare Proiect Nativ Android & Keystore
+      - name: 4. Generare Proiect Android si Keystore
         run: |
-          mkdir -p android-app/app/src/main/assets
-          mkdir -p android-app/app/src/main/java/com/florinvasii/subtext
-          mkdir -p android-app/app/src/main/res/drawable
-          mkdir -p android-app/app/src/main/res/values
+          echo "aW1wb3J0IG9zLCBzdHJ1Y3QsIHpsaWIsIHNodXRpbCwgc3VicHJvY2VzcwoKb3MubWFrZWRpcnMoImFuZHJvaWQtYXBwL2FwcC9zcmMvbWFpbi9hc3NldHMiLCBleGlzdF9vaz1UcnVlKQpvcy5tYWtlZGlycygiYW5kcm9pZC1hcHAvYXBwL3NyYy9tYWluL2phdmEvY29tL2Zsb3JpbnZhc2lpL3N1YnRleHQiLCBleGlzdF9vaz1UcnVlKQpvcy5tYWtlZGlycygiYW5kcm9pZC1hcHAvYXBwL3NyYy9tYWluL3Jlcy9taXBtYXAteHh4aGRwaSIsIGV4aXN0X29rPVRydWUpCgpzaHV0aWwuY29weWZpbGUoImluZGV4Lmh0bWwiLCAiYW5kcm9pZC1hcHAvYXBwL3NyYy9tYWluL2Fzc2V0cy9pbmRleC5odG1sIikKCiMgR2VuZXJhdGUgY3Jpc3AgMTkyeDE5MiBQTkcgaWNvbiB3aXRoICJTIiBsb2dvCnNpemUgPSAxOTIKcmF3ID0gYnl0ZWFycmF5KCkKZm9yIHkgaW4gcmFuZ2Uoc2l6ZSk6CiAgICByYXcuYXBwZW5kKDApCiAgICBmb3IgeCBpbiByYW5nZShzaXplKToKICAgICAgICBtID0gMjAKICAgICAgICBpZiBtIDw9IHggPCBzaXplIC0gbSBhbmQgbSA8PSB5IDwgc2l6ZSAtIG06CiAgICAgICAgICAgIHJhdy5leHRlbmQoKDI0NSwgMTU4LCAxMSwgMjU1KSkKICAgICAgICBlbHNlOgogICAgICAgICAgICByYXcuZXh0ZW5kKCg4LCA5LCAxNCwgMjU1KSkKCmRlZiBjaHVuayh0LCBkKToKICAgIHJldHVybiBzdHJ1Y3QucGFjaygiIUkiLCBsZW4oZCkpICsgdCArIGQgKyBzdHJ1Y3QucGFjaygiIUkiLCB6bGliLmNyYzMyKHQgKyBkKSAmIDB4ZmZmZmZmZmYpCgpwbmcgPSBiIlx4ODlQTkdcclxuXHgxYVxuIiArIGNodW5rKGIiSUhEUiIsIHN0cnVjdC5wYWNrKCIhSUlCQkJCQiIsIHNpemUsIHNpemUsIDgsIDYsIDAsIDAsIDApKSArIGNodW5rKGIiSURBVCIsIHpsaWIuY29tcHJlc3MoYnl0ZXMocmF3KSwgOSkpICsgY2h1bmsoYiJJRU5EIiwgYiIiKQp3aXRoIG9wZW4oImFuZHJvaWQtYXBwL2FwcC9zcmMvbWFpbi9yZXMvbWlwbWFwLXh4eGhkcGkvaWNfbGF1bmNoZXIucG5nIiwgIndiIikgYXMgZjoKICAgIGYud3JpdGUocG5nKQoKd2l0aCBvcGVuKCJhbmRyb2lkLWFwcC9zZXR0aW5ncy5ncmFkbGUiLCAidyIpIGFzIGY6CiAgICBmLndyaXRlKCIiInBsdWdpbk1hbmFnZW1lbnQgewogICAgcmVwb3NpdG9yaWVzIHsKICAgICAgICBnb29nbGUoKQogICAgICAgIG1hdmVuQ2VudHJhbCgpCiAgICAgICAgZ3JhZGxlUGx1Z2luUG9ydGFsKCkKICAgIH0KfQpkZXBlbmRlbmN5UmVzb2x1dGlvbk1hbmFnZW1lbnQgewogICAgcmVwb3NpdG9yaWVzTW9kZS5zZXQoUmVwb3NpdG9yaWVzTW9kZS5GQUlMX09OX1BST0pFQ1RfUkVQT1MpCiAgICByZXBvc2l0b3JpZXMgewogICAgICAgIGdvb2dsZSgpCiAgICAgICAgbWF2ZW5DZW50cmFsKCkKICAgIH0KfQpyb290UHJvamVjdC5uYW1lID0gIlNVQlRFWFQiCmluY2x1ZGUoIjphcHAiKQoiIiIpCgp3aXRoIG9wZW4oImFuZHJvaWQtYXBwL2J1aWxkLmdyYWRsZSIsICJ3IikgYXMgZjoKICAgIGYud3JpdGUoIiIicGx1Z2lucyB7CiAgICBpZCAnY29tLmFuZHJvaWQuYXBwbGljYXRpb24nIHZlcnNpb24gJzguMy4yJyBhcHBseSBmYWxzZQp9CiIiIikKCndpdGggb3BlbigiYW5kcm9pZC1hcHAvZ3JhZGxlLnByb3BlcnRpZXMiLCAidyIpIGFzIGY6CiAgICBmLndyaXRlKCIiImFuZHJvaWQudXNlQW5kcm9pZFg9dHJ1ZQpvcmcuZ3JhZGxlLmp2bWFyZ3M9LVhteDIwNDhtIC1EZmlsZS5lbmNvZGluZz1VVEYtOAoiIiIpCgp3aXRoIG9wZW4oImFuZHJvaWQtYXBwL2FwcC9idWlsZC5ncmFkbGUiLCAidyIpIGFzIGY6CiAgICBmLndyaXRlKCIiInBsdWdpbnMgewogICAgaWQgJ2NvbS5hbmRyb2lkLmFwcGxpY2F0aW9uJwp9CgphbmRyb2lkIHsKICAgIG5hbWVzcGFjZSAnY29tLmZsb3JpbnZhc2lpLnN1YnRleHQnCiAgICBjb21waWxlU2RrIDM1CgogICAgZGVmYXVsdENvbmZpZyB7CiAgICAgICAgYXBwbGljYXRpb25JZCAiY29tLmZsb3JpbnZhc2lpLnN1YnRleHQiCiAgICAgICAgbWluU2RrIDI0CiAgICAgICAgdGFyZ2V0U2RrIDM1CiAgICAgICAgdmVyc2lvbkNvZGUgMQogICAgICAgIHZlcnNpb25OYW1lICIxLjAuMCIKICAgIH0KCiAgICBzaWduaW5nQ29uZmlncyB7CiAgICAgICAgcmVsZWFzZSB7CiAgICAgICAgICAgIHN0b3JlRmlsZSBmaWxlKCIuLi9zdWJ0ZXh0LXJlbGVhc2Uua2V5c3RvcmUiKQogICAgICAgICAgICBzdG9yZVBhc3N3b3JkICJTdWJ0ZXh0MjAyNktleSIKICAgICAgICAgICAga2V5QWxpYXMgInN1YnRleHRfa2V5IgogICAgICAgICAgICBrZXlQYXNzd29yZCAiU3VidGV4dDIwMjZLZXkiCiAgICAgICAgfQogICAgfQoKICAgIGJ1aWxkVHlwZXMgewogICAgICAgIHJlbGVhc2UgewogICAgICAgICAgICBzaWduaW5nQ29uZmlnIHNpZ25pbmdDb25maWdzLnJlbGVhc2UKICAgICAgICAgICAgbWluaWZ5RW5hYmxlZCBmYWxzZQogICAgICAgICAgICBzaHJpbmtSZXNvdXJjZXMgZmFsc2UKICAgICAgICB9CiAgICB9Cn0KCmRlcGVuZGVuY2llcyB7fQoiIiIpCgp3aXRoIG9wZW4oImFuZHJvaWQtYXBwL2FwcC9zcmMvbWFpbi9BbmRyb2lkTWFuaWZlc3QueG1sIiwgInciKSBhcyBmOgogICAgZi53cml0ZSgiIiI8P3htbCB2ZXJzaW9uPSIxLjAiIGVuY29kaW5nPSJ1dGYtOCI/Pgo8bWFuaWZlc3QgeG1sbnM6YW5kcm9pZD0iaHR0cDovL3NjaGVtYXMuYW5kcm9pZC5jb20vYXBrL3Jlcy9hbmRyb2lkIj4KICAgIDx1c2VzLXBlcm1pc3Npb24gYW5kcm9pZDpuYW1lPSJhbmRyb2lkLnBlcm1pc3Npb24uSU5URVJORVQiIC8+CgogICAgPGFwcGxpY2F0aW9uCiAgICAgICAgYW5kcm9pZDphbGxvd0JhY2t1cD0idHJ1ZSIKICAgICAgICBhbmRyb2lkOmljb249IkBtaXBtYXAvaWNfbGF1bmNoZXIiCiAgICAgICAgYW5kcm9pZDpyb3VuZEljb249IkBtaXBtYXAvaWNfbGF1bmNoZXIiCiAgICAgICAgYW5kcm9pZDpsYWJlbD0iU1VCVEVYVCIKICAgICAgICBhbmRyb2lkOnVzZXNDbGVhcnRleHRUcmFmZmljPSJ0cnVlIgogICAgICAgIGFuZHJvaWQ6dGhlbWU9IkBhbmRyb2lkOnN0eWxlL1RoZW1lLkRldmljZURlZmF1bHQuTm9BY3Rpb25CYXIiPgogICAgICAgIDxhY3Rpdml0eQogICAgICAgICAgICBhbmRyb2lkOm5hbWU9ImNvbS5mbG9yaW52YXNpaS5zdWJ0ZXh0Lk1haW5BY3Rpdml0eSIKICAgICAgICAgICAgYW5kcm9pZDpleHBvcnRlZD0idHJ1ZSIKICAgICAgICAgICAgYW5kcm9pZDpjb25maWdDaGFuZ2VzPSJvcmllbnRhdGlvbnxzY3JlZW5TaXplfGtleWJvYXJkSGlkZGVuIj4KICAgICAgICAgICAgPGludGVudC1maWx0ZXI+CiAgICAgICAgICAgICAgICA8YWN0aW9uIGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuYWN0aW9uLk1BSU4iIC8+CiAgICAgICAgICAgICAgICA8Y2F0ZWdvcnkgYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5MQVVOQ0hFUiIgLz4KICAgICAgICAgICAgPC9pbnRlbnQtZmlsdGVyPgogICAgICAgIDwvYWN0aXZpdHk+CiAgICA8L2FwcGxpY2F0aW9uPgo8L21hbmlmZXN0PgoiIiIpCgp3aXRoIG9wZW4oImFuZHJvaWQtYXBwL2FwcC9zcmMvbWFpbi9qYXZhL2NvbS9mbG9yaW52YXNpaS9zdWJ0ZXh0L01haW5BY3Rpdml0eS5qYXZhIiwgInciKSBhcyBmOgogICAgZi53cml0ZSgiIiJwYWNrYWdlIGNvbS5mbG9yaW52YXNpaS5zdWJ0ZXh0OwoKaW1wb3J0IGFuZHJvaWQuYXBwLkFjdGl2aXR5OwppbXBvcnQgYW5kcm9pZC5jb250ZW50LkludGVudDsKaW1wb3J0IGFuZHJvaWQuZ3JhcGhpY3MuQ29sb3I7CmltcG9ydCBhbmRyb2lkLm5ldC5Vcmk7CmltcG9ydCBhbmRyb2lkLm9zLkJ1bmRsZTsKaW1wb3J0IGFuZHJvaWQudmlldy5XaW5kb3c7CmltcG9ydCBhbmRyb2lkLndlYmtpdC5WYWx1ZUNhbGxiYWNrOwppbXBvcnQgYW5kcm9pZC53ZWJraXQuV2ViQ2hyb21lQ2xpZW50OwppbXBvcnQgYW5kcm9pZC53ZWJraXQuV2ViU2V0dGluZ3M7CmltcG9ydCBhbmRyb2lkLndlYmtpdC5XZWJWaWV3OwppbXBvcnQgYW5kcm9pZC53ZWJraXQuV2ViVmlld0NsaWVudDsKCnB1YmxpYyBjbGFzcyBNYWluQWN0aXZpdHkgZXh0ZW5kcyBBY3Rpdml0eSB7CiAgICBwcml2YXRlIFdlYlZpZXcgd2ViVmlldzsKICAgIHByaXZhdGUgVmFsdWVDYWxsYmFjazxVcmlbXT4gZmlsZVBhdGhDYWxsYmFjazsKICAgIHByaXZhdGUgc3RhdGljIGZpbmFsIGludCBGSUxFX0NIT09TRVJfUkVTVUxUX0NPREUgPSAxMDAxOwoKICAgIEBPdmVycmlkZQogICAgcHJvdGVjdGVkIHZvaWQgb25DcmVhdGUoQnVuZGxlIHNhdmVkSW5zdGFuY2VTdGF0ZSkgewogICAgICAgIHN1cGVyLm9uQ3JlYXRlKHNhdmVkSW5zdGFuY2VTdGF0ZSk7CiAgICAgICAgV2luZG93IHdpbmRvdyA9IGdldFdpbmRvdygpOwogICAgICAgIHdpbmRvdy5zZXRTdGF0dXNCYXJDb2xvcihDb2xvci5wYXJzZUNvbG9yKCIjMDgwOTBFIikpOwogICAgICAgIHdpbmRvdy5zZXROYXZpZ2F0aW9uQmFyQ29sb3IoQ29sb3IucGFyc2VDb2xvcigiIzA4MDkwRSIpKTsKCiAgICAgICAgd2ViVmlldyA9IG5ldyBXZWJWaWV3KHRoaXMpOwogICAgICAgIHdlYlZpZXcuc2V0QmFja2dyb3VuZENvbG9yKENvbG9yLnBhcnNlQ29sb3IoIiMwODA5MEUiKSk7CiAgICAgICAgc2V0Q29udGVudFZpZXcod2ViVmlldyk7CgogICAgICAgIFdlYlNldHRpbmdzIHNldHRpbmdzID0gd2ViVmlldy5nZXRTZXR0aW5ncygpOwogICAgICAgIHNldHRpbmdzLnNldEphdmFTY3JpcHRFbmFibGVkKHRydWUpOwogICAgICAgIHNldHRpbmdzLnNldERvbVN0b3JhZ2VFbmFibGVkKHRydWUpOwogICAgICAgIHNldHRpbmdzLnNldERhdGFiYXNlRW5hYmxlZCh0cnVlKTsKICAgICAgICBzZXR0aW5ncy5zZXRBbGxvd0ZpbGVBY2Nlc3ModHJ1ZSk7CiAgICAgICAgc2V0dGluZ3Muc2V0QWxsb3dDb250ZW50QWNjZXNzKHRydWUpOwoKICAgICAgICB3ZWJWaWV3LnNldFdlYlZpZXdDbGllbnQobmV3IFdlYlZpZXdDbGllbnQoKSk7CiAgICAgICAgd2ViVmlldy5zZXRXZWJDaHJvbWVDbGllbnQobmV3IFdlYkNocm9tZUNsaWVudCgpIHsKICAgICAgICAgICAgQE92ZXJyaWRlCiAgICAgICAgICAgIHB1YmxpYyBib29sZWFuIG9uU2hvd0ZpbGVDaG9vc2VyKFdlYlZpZXcgd2ViVmlldywgVmFsdWVDYWxsYmFjazxVcmlbXT4gZmlsZVBhdGhDYWxsYmFjaywgRmlsZUNob29zZXJQYXJhbXMgZmlsZUNob29zZXJQYXJhbXMpIHsKICAgICAgICAgICAgICAgIGlmIChNYWluQWN0aXZpdHkudGhpcy5maWxlUGF0aENhbGxiYWNrICE9IG51bGwpIHsKICAgICAgICAgICAgICAgICAgICBNYWluQWN0aXZpdHkudGhpcy5maWxlUGF0aENhbGxiYWNrLm9uUmVjZWl2ZVZhbHVlKG51bGwpOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgTWFpbkFjdGl2aXR5LnRoaXMuZmlsZVBhdGhDYWxsYmFjayA9IGZpbGVQYXRoQ2FsbGJhY2s7CiAgICAgICAgICAgICAgICBJbnRlbnQgaW50ZW50ID0gZmlsZUNob29zZXJQYXJhbXMuY3JlYXRlSW50ZW50KCk7CiAgICAgICAgICAgICAgICB0cnkgewogICAgICAgICAgICAgICAgICAgIHN0YXJ0QWN0aXZpdHlGb3JSZXN1bHQoaW50ZW50LCBGSUxFX0NIT09TRVJfUkVTVUxUX0NPREUpOwogICAgICAgICAgICAgICAgfSBjYXRjaCAoRXhjZXB0aW9uIGUpIHsKICAgICAgICAgICAgICAgICAgICBNYWluQWN0aXZpdHkudGhpcy5maWxlUGF0aENhbGxiYWNrID0gbnVsbDsKICAgICAgICAgICAgICAgICAgICByZXR1cm4gZmFsc2U7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICByZXR1cm4gdHJ1ZTsKICAgICAgICAgICAgfQogICAgICAgIH0pOwoKICAgICAgICB3ZWJWaWV3LmxvYWRVcmwoImZpbGU6Ly8vYW5kcm9pZF9hc3NldC9pbmRleC5odG1sIik7CiAgICB9CgogICAgQE92ZXJyaWRlCiAgICBwcm90ZWN0ZWQgdm9pZCBvbkFjdGl2aXR5UmVzdWx0KGludCByZXF1ZXN0Q29kZSwgaW50IHJlc3VsdENvZGUsIEludGVudCBkYXRhKSB7CiAgICAgICAgaWYgKHJlcXVlc3RDb2RlID09IEZJTEVfQ0hPT1NFUl9SRVNVTFRfQ09ERSkgewogICAgICAgICAgICBpZiAoZmlsZVBhdGhDYWxsYmFjayA9PSBudWxsKSByZXR1cm47CiAgICAgICAgICAgIFVyaVtdIHJlc3VsdHMgPSBXZWJDaHJvbWVDbGllbnQuRmlsZUNob29zZXJQYXJhbXMucGFyc2VSZXN1bHQocmVzdWx0Q29kZSwgZGF0YSk7CiAgICAgICAgICAgIGZpbGVQYXRoQ2FsbGJhY2sub25SZWNlaXZlVmFsdWUocmVzdWx0cyk7CiAgICAgICAgICAgIGZpbGVQYXRoQ2FsbGJhY2sgPSBudWxsOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHN1cGVyLm9uQWN0aXZpdHlSZXN1bHQocmVxdWVzdENvZGUsIHJlc3VsdENvZGUsIGRhdGEpOwogICAgICAgIH0KICAgIH0KCiAgICBAT3ZlcnJpZGUKICAgIHB1YmxpYyB2b2lkIG9uQmFja1ByZXNzZWQoKSB7CiAgICAgICAgaWYgKHdlYlZpZXcgIT0gbnVsbCAmJiB3ZWJWaWV3LmNhbkdvQmFjaygpKSB7CiAgICAgICAgICAgIHdlYlZpZXcuZ29CYWNrKCk7CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgc3VwZXIub25CYWNrUHJlc3NlZCgpOwogICAgICAgIH0KICAgIH0KfQoiIiIpCgp3aXRoIG9wZW4oImFuZHJvaWQtYXBwL0tFWVNUT1JFLUlORk8udHh0IiwgInciKSBhcyBmOgogICAgZi53cml0ZSgiIiI9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CklORk9STUFUSUkgQ0hFSUUgU0VNTkFUVVJBIEdPT0dMRSBQTEFZIChQQVNUUkVBWkEhKQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CkZpc2llciBLZXlzdG9yZSA6IHN1YnRleHQtcmVsZWFzZS5rZXlzdG9yZQpLZXkgQWxpYXMgICAgICAgOiBzdWJ0ZXh0X2tleQpTdG9yZSBQYXNzd29yZCAgOiBTdWJ0ZXh0MjAyNktleQpLZXkgUGFzc3dvcmQgICAgOiBTdWJ0ZXh0MjAyNktleQpQYWNrYWdlIElEICAgICAgOiBjb20uZmxvcmludmFzaWkuc3VidGV4dAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiIiIikK" | tr -d ' \n\r' | base64 -d > generate_project.py
+          python3 generate_project.py
+          keytool -genkeypair -v -keystore android-app/subtext-release.keystore -alias subtext_key -keyalg RSA -keysize 2048 -validity 10000 -storepass Subtext2026Key -keypass Subtext2026Key -dname "CN=Florin Vasii, OU=MagicApp, O=Subtext, L=Bucharest, S=IF, C=RO"
 
-          cp index.html android-app/app/src/main/assets/index.html
-
-          keytool -genkeypair -v \
-            -keystore android-app/subtext-release.keystore \
-            -alias subtext_key \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -storepass Subtext2026! -keypass Subtext2026! \
-            -dname "CN=Florin Vasii, OU=MagicApp, O=Subtext, L=Bucharest, S=IF, C=RO"
-
-          cat << 'EOF' > android-app/KEYSTORE-INFO.txt
-          ====================================================
-          INFORMATII CHEIE SEMNATURA GOOGLE PLAY (PASTReAZA!)
-          ====================================================
-          Fisier Keystore : subtext-release.keystore
-          Key Alias       : subtext_key
-          Store Password  : Subtext2026!
-          Key Password    : Subtext2026!
-          Package ID      : com.florinvasii.subtext
-          ====================================================
-          EOF
-
-          cat << 'EOF' > android-app/settings.gradle
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.name = "SUBTEXT"
-          include(":app")
-          EOF
-
-          cat << 'EOF' > android-app/build.gradle
-          plugins {
-              id 'com.android.application' version '8.3.2' apply false
-          }
-          EOF
-
-          cat << 'EOF' > android-app/gradle.properties
-          android.useAndroidX=true
-          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-          EOF
-
-          cat << 'EOF' > android-app/app/build.gradle
-          plugins {
-              id 'com.android.application'
-          }
-
-          android {
-              namespace 'com.florinvasii.subtext'
-              compileSdk 35
-
-              defaultConfig {
-                  applicationId "com.florinvasii.subtext"
-                  minSdk 24
-                  targetSdk 35
-                  versionCode 1
-                  versionName "1.0.0"
-              }
-
-              signingConfigs {
-                  release {
-                      storeFile file("../subtext-release.keystore")
-                      storePassword "Subtext2026!"
-                      keyAlias "subtext_key"
-                      keyPassword "Subtext2026!"
-                  }
-              }
-
-              buildTypes {
-                  release {
-                      signingConfig signingConfigs.release
-                      minifyEnabled false
-                      shrinkResources false
-                  }
-              }
-          }
-
-          dependencies {}
-          EOF
-
-          cat << 'EOF' > android-app/app/src/main/res/drawable/ic_launcher.xml
-          <vector xmlns:android="http://schemas.android.com/apk/res/android"
-              android:width="108dp"
-              android:height="108dp"
-              android:viewportWidth="512"
-              android:viewportHeight="512">
-              <path
-                  android:fillColor="#08090E"
-                  android:pathData="M0,0h512v512h-512z"/>
-              <path
-                  android:fillColor="#F59E0B"
-                  android:pathData="M96,64L416,64A32,32 0,0 1,448 96L448,416A32,32 0,0 1,416 448L96,448A32,32 0,0 1,64 416L64,96A32,32 0,0 1,96 64z"/>
-              <path
-                  android:fillColor="#08090E"
-                  android:pathData="M190,195 C190,155 322,155 322,205 C322,245 190,250 190,305 C190,355 322,355 322,305"
-                  android:strokeWidth="44"
-                  android:strokeColor="#08090E"
-                  android:strokeLineCap="round"/>
-          </vector>
-          EOF
-
-          cat << 'EOF' > android-app/app/src/main/AndroidManifest.xml
-          <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <uses-permission android:name="android.permission.INTERNET" />
-
-              <application
-                  android:allowBackup="true"
-                  android:icon="@drawable/ic_launcher"
-                  android:roundIcon="@drawable/ic_launcher"
-                  android:label="SUBTEXT"
-                  android:usesCleartextTraffic="true"
-                  android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true"
-                      android:configChanges="orientation|screenSize|keyboardHidden">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-
-          cat << 'EOF' > android-app/app/src/main/java/com/florinvasii/subtext/MainActivity.java
-          package com.florinvasii.subtext;
-
-          import android.app.Activity;
-          import android.content.Intent;
-          import android.graphics.Color;
-          import android.net.Uri;
-          import android.os.Bundle;
-          import android.view.Window;
-          import android.webkit.ValueCallback;
-          import android.webkit.WebChromeClient;
-          import android.webkit.WebSettings;
-          import android.webkit.WebView;
-          import android.webkit.WebViewClient;
-
-          public class MainActivity extends Activity {
-              private WebView webView;
-              private ValueCallback<Uri[]> filePathCallback;
-              private static final int FILE_CHOOSER_RESULT_CODE = 1001;
-
-              @Override
-              protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-                  Window window = getWindow();
-                  window.setStatusBarColor(Color.parseColor("#08090E"));
-                  window.setNavigationBarColor(Color.parseColor("#08090E"));
-
-                  webView = new WebView(this);
-                  webView.setBackgroundColor(Color.parseColor("#08090E"));
-                  setContentView(webView);
-
-                  WebSettings settings = webView.getSettings();
-                  settings.setJavaScriptEnabled(true);
-                  settings.setDomStorageEnabled(true);
-                  settings.setDatabaseEnabled(true);
-                  settings.setAllowFileAccess(true);
-                  settings.setAllowContentAccess(true);
-
-                  webView.setWebViewClient(new WebViewClient());
-                  webView.setWebChromeClient(new WebChromeClient() {
-                      @Override
-                      public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-                          if (MainActivity.this.filePathCallback != null) {
-                              MainActivity.this.filePathCallback.onReceiveValue(null);
-                          }
-                          MainActivity.this.filePathCallback = filePathCallback;
-                          Intent intent = fileChooserParams.createIntent();
-                          try {
-                              startActivityForResult(intent, FILE_CHOOSER_RESULT_CODE);
-                          } catch (Exception e) {
-                              MainActivity.this.filePathCallback = null;
-                              return false;
-                          }
-                          return true;
-                      }
-                  });
-
-                  webView.loadUrl("file:///android_asset/index.html");
-              }
-
-              @Override
-              protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                  if (requestCode == FILE_CHOOSER_RESULT_CODE) {
-                      if (filePathCallback == null) return;
-                      Uri[] results = WebChromeClient.FileChooserParams.parseResult(resultCode, data);
-                      filePathCallback.onReceiveValue(results);
-                      filePathCallback = null;
-                  } else {
-                      super.onActivityResult(requestCode, resultCode, data);
-                  }
-              }
-
-              @Override
-              public void onBackPressed() {
-                  if (webView != null && webView.canGoBack()) {
-                      webView.goBack();
-                  } else {
-                      super.onBackPressed();
-                  }
-              }
-          }
-          EOF
-
-      - name: 5. Compilare SUBTEXT (.aab pentru Google Play si .apk pentru telefon)
+      - name: 5. Compilare SUBTEXT (.aab si .apk)
         working-directory: android-app
         run: |
           gradle bundleRelease assembleRelease --no-daemon
           cp app/build/outputs/bundle/release/app-release.aab ./SUBTEXT-GooglePlay.aab
           cp app/build/outputs/apk/release/app-release.apk ./SUBTEXT-Telefon.apk
 
-      - name: 6. Publicare directa in sectiunea Releases pe GitHub
+      - name: 6. Atasare fisiere direct in pagina Actions (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pachet-SUBTEXT-Android
+          path: |
+            android-app/SUBTEXT-GooglePlay.aab
+            android-app/SUBTEXT-Telefon.apk
+            android-app/subtext-release.keystore
+            android-app/KEYSTORE-INFO.txt
+
+      - name: 7. Publicare in sectiunea Releases pe GitHub
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
